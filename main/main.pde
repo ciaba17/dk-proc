@@ -1,18 +1,25 @@
 void setup() {
-  size(1920, 1080, P2D);
+  size(600, 800, P2D);
+  surface.setResizable(true);
+  
   imageMode(CENTER);
+  
   scala = loadImage("../data/scala.png");
+  trave = loadImage("../data/trave.png");
 }
 
 
 void draw() {
-  background(0);
   update();
+  background(0);
+  
+  
   drawMap();
+  drawGrid();
 }
 
 
 void update() {
-  
+  resize();
   
 }
