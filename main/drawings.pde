@@ -11,14 +11,22 @@ void drawMap() {
       else if (mappa[i][27] == 2) {
         offset -= 1.5; 
       }
-      if (i == 31 || i == 7) {
+      if (i == 31) {
         offset = 0; 
       }
       
       if (mappa[i][j] == 2) {
-        for (int n = 1; n < 5; n++) {
-          if (mappa[i-n][j] == 1)
-            image(scala, squareW * j + squareW/2, squareH * (i-n) + squareH/2 + offset, squareW, squareH);
+        if (i == 10) {
+          for (int n = 1; n < 10; n++)
+            if (mappa[i-n][j] == 1)
+              image(scala, squareW * j + squareW/2, squareH * (i-n) + squareH/2 + squareH, squareW, squareH);
+        }
+        else {
+          for (int n = 1; n < 5; n++) {
+            if (mappa[i-n][j] == 1) {
+              image(scala, squareW * j + squareW/2, squareH * (i-n) + squareH/2 + offset, squareW, squareH);
+            }
+          }
         }
       }
     }
@@ -52,8 +60,7 @@ void drawMap() {
           }
           else
             image(trave, squareW * j + squareW/2, squareH * i + squareH/2 + offset, squareW, squareH);
-      }
-        
+      }    
     }
   }
 }
