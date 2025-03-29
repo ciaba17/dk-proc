@@ -1,14 +1,21 @@
 class Mario {
-  int x, y;
-  int speed;
+  float x, y;
+  int speed = 5;
+  int dir;
   PImage sprite;
   
-  void muovi(int dir) {
+  void move() {
     x += speed * dir; 
   }
   
   void draw() {
-    image(sprite, x, y); 
+    int gridPosX = int((x-squareW/2)/28 + 5);
+    
+    if (gridPosX >= 16)
+      offset -= 1.9 * (gridPosX - 16);
+    
+    image(sprite, x + squareW*5 - squareW/2, y + squareH*31 - squareH/2 + offset, squareW, squareH); 
+    println(x, speed, dir, gridPosX, offset);
   }
 }
 
@@ -18,22 +25,24 @@ class Barile {
   int x, y;
   PImage sprite;
   
-  Barile() {
-  }
-  
   void rotola(int dir) {   
     x += speed * dir;
   }
   
   void draw() {
-    image(sprite, x, y);
+    image(sprite, x, y, squareW, squareH);
   }
 }
 
 
+Mario mario;
+
+float offset;
 PImage scala, trave;
 float lastWidth, lastHeight;
 float squareW, squareH;
+
+int moveLeft, moveRight;
 
 
 int[][] mappaTravi = {
