@@ -8,6 +8,7 @@ void keyPressed() {
     case 'd':
       mario.dir = 1;
       break;
+    
   }
 }
 

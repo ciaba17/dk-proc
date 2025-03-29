@@ -1,23 +1,31 @@
 class Mario {
   float x, y;
-  int speed = 5;
+  float speed = 5;
   int dir;
   PImage sprite;
+
   
   void move() {
-    x += speed * dir; 
+    x += speed * width/800 * dir; // Muove sull'asse x aggiungendo velocità e normalizzandola per la larghezza
   }
   
   void draw() {
-    int gridPosX = int((x-squareW/2)/28 + 5);
+    float startX = width*5/28 - squareW/2, startY = height*31/32 - squareH/2;
+    int gridPosX = int((x + startX)/(width/28));
     
-    if (gridPosX >= 16)
-      offset -= 1.9 * (gridPosX - 16);
-    
-    image(sprite, x + squareW*5 - squareW/2, y + squareH*31 - squareH/2 + offset, squareW, squareH); 
-    println(x, speed, dir, gridPosX, offset);
+    if (gridPosX >= 14)
+      offset -= 1.9 * (gridPosX - 13);
+      
+    image(sprite, x + startX, y + startY + offset, squareW, squareH);
+    println(gridPosX);
+  }
+
+  void updatePosition() {
+    x *= width / lastWidth;
+    y *= height / lastHeight;
   }
 }
+
 
 
 class Barile {
@@ -39,7 +47,7 @@ Mario mario;
 
 float offset;
 PImage scala, trave;
-float lastWidth, lastHeight;
+float lastWidth = 1, lastHeight = 1;
 float squareW, squareH;
 
 int moveLeft, moveRight;

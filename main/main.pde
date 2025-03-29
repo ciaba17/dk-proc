@@ -1,4 +1,4 @@
- void setup() {
+void setup() {
   size(600, 800, P2D);
   surface.setResizable(true);
   
