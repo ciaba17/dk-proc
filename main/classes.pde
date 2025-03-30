@@ -2,7 +2,6 @@ class Mario {
   float x, y;
   float speed = 5;
   int dir;
-  boolean salire = false;
   PImage sprite;
   int gridPosX, gridPosY;
 
@@ -10,8 +9,10 @@ class Mario {
   void move() {
     x += speed * width/800 * dir; // Muove sull'asse x aggiungendo velocità e normalizzandola per la larghezza
     
-    if (salire) {
-      y -= speed * height/800; 
+    if (gridPosX > 0 && wPressed) {
+      if (mappaLogica[mario.gridPosY][mario.gridPosX] == 1 || mappaLogica[mario.gridPosY][mario.gridPosX-1] == 1 || mappaLogica[mario.gridPosY][mario.gridPosX+1] == 1) { // Guarda se il player si trova in prossimità di una scala
+        y -= speed * height/800;
+      }
     }
     
     
@@ -23,10 +24,11 @@ class Mario {
     gridPosX = int((x + startX)/(width/28));
     gridPosY = int((y+startY)/(height/32));
     
+    offset();
     
-    if (gridPosY == 30 && gridPosX >= 14)
-      offset -= height*0.002 * (gridPosX - 13);
-   
+    //if (gridPosY == 30 && gridPosX >= 14)
+      //offset -= height*0.002 * (gridPosX - 13);
+
       
     image(sprite, x + startX, y + startY + offset, squareW, squareH);
   }

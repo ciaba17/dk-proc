@@ -14,10 +14,10 @@ void resize() {
 
 void offsetMappa(int i, int j) {
   if (i != 31) {
-    if (mappaTravi[i][0] == 2){
+    if (mappaLogica[i][0] == 2){
      offset += height*0.0018;
     }
-    else if (mappaTravi[i][27] == 2) {
+    else if (mappaLogica[i][27] == 2) {
     offset -= height*0.0018; 
     }
   }

@@ -27,7 +27,6 @@ void draw() {
 
 void update() {
   resize();
-  println(mario.gridPosX,mario.gridPosY);
   
   mario.move();
 }
