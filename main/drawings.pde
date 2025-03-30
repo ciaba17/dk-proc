@@ -34,7 +34,7 @@ void drawMap() {
       
       if (mappaTravi[i][j] == 2) {
           if (i == 10 && j < 18) {
-            image(trave, squareW * j + squareW/2, squareH * i + squareH/2 + (1.5*18), squareW, squareH); 
+            image(trave, squareW * j + squareW/2, squareH * i + squareH/2 + (height*0.0018*18), squareW, squareH); 
           }
           else
             image(trave, squareW * j + squareW/2, squareH * i + squareH/2 + offset, squareW, squareH);
@@ -58,7 +58,7 @@ void drawGrid() {
     for (int j = 0; j < 28; j++) {
       stroke(150);
       strokeWeight(0.5);
-      fill(0, 0, 0, 100);
+      fill(0, 0, 0, 70);
       rect(squareW * j, squareH * i, squareW, squareH);
     }
   }
