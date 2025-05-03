@@ -7,15 +7,7 @@ class Mario {
 
   
   void move() {
-    x += speed * width/800 * dir; // Muove sull'asse x aggiungendo velocità e normalizzandola per la larghezza
-    
-    if (gridPosX > 0 && wPressed) {
-      if (mappaLogica[mario.gridPosY][mario.gridPosX] == 1 || mappaLogica[mario.gridPosY][mario.gridPosX-1] == 1 || mappaLogica[mario.gridPosY][mario.gridPosX+1] == 1) { // Guarda se il player si trova in prossimità di una scala
-        y -= speed * height/800;
-      }
-    }
-    
-    
+    x += speed * width/800 * dir; // Muove sull'asse x aggiungendo velocità e normalizzandola per la larghezza    
   }
   
   void draw() {

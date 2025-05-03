@@ -8,7 +8,7 @@ void setup() {
   
   scala = loadImage("../data/scala.png");
   trave = loadImage("../data/trave.png");
-  mario.sprite = loadImage("../data/scala.png");
+  mario.sprite = loadImage("../data/mario.png");
 }
 
 
@@ -18,10 +18,8 @@ void draw() {
   
   
   drawMap();
-  drawMario();
-  
   drawGrid();
-  
+  mario.draw();
 }
 
 

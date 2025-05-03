@@ -12,21 +12,16 @@ void resize() {
 }
 
 
-void offsetMappa(int i, int j) {
-  if (i != 31) {
-    if (mappaLogica[i][0] == 2){
-     offset += height*0.0018;
-    }
-    else if (mappaLogica[i][27] == 2) {
-    offset -= height*0.0018; 
-    }
-  }
-  else {
-    if (j == 0) {
-      offset = 0;
-    }
-    if (j > 13) {
-      offset -= height*0.002;
+void lineaTravi(int inizio, int fine, int j, int inizioOffset, int direzione) {
+  int iSuccessivo = 2;
+  float offset = 0;
+  for(int i = inizio; i < fine; i++) {
+    image(trave, ((i * squareW) + squareW/2), ((j * squareH) + squareH/2) + offset, squareW, squareH);    
+    if (iSuccessivo == i) {
+      iSuccessivo += 2 * direzione;
+      if (i > inizioOffset) {
+        offset += height/300;
+      }
     }
   }
 }
