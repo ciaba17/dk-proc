@@ -1,6 +1,9 @@
 void setup() {
-  size(600, 800, P2D);
+  size(600, 800);
   surface.setResizable(true);
+  noSmooth();
+
+  frameRate(30);
   
   imageMode(CENTER);
   
@@ -8,7 +11,9 @@ void setup() {
   
   scala = loadImage("../data/scala.png");
   trave = loadImage("../data/trave.png");
-  mario.sprite = loadImage("../data/mario.png");
+  for (int i = 0; i < mario.frames.length; i++) {
+     mario.frames[i] = loadImage("../data/marioSprites/" + i +  ".png");
+  }
 }
 
 

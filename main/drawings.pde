@@ -1,7 +1,11 @@
 void drawMap() {
+  lineaTravi(11, 17, 8, 32, true, 1);
   lineaTravi(0, 26, 11, 15, true, 1);
-  lineaTravi(1, 26, 14, 0, false, 1);
-
+  lineaTravi(2, 27, 14, 0, false, 1);
+  lineaTravi(0, 26, 18, 0, true, 1);
+  lineaTravi(2, 27, 22, 0, false, 1);
+  lineaTravi(0, 26, 26, 0, true, 1);
+  lineaTravi(0, 28, 31, 10, true, -1);
 }
 
 
