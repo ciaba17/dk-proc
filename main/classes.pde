@@ -6,6 +6,7 @@ class Mario {
   float frameIndex = 0;
   PImage[] frames = new PImage[4];
   int gridPosX, gridPosY;
+  boolean idleDestra = true;
 
   
   void move() {
@@ -16,12 +17,12 @@ class Mario {
     gridPosX = round((x + startX) / (width / 28));
     gridPosY = round((y + startY) / (height / 32));
     
-    if (gridPosY == 30 && gridPosX >= 14)
+    if (gridPosY == 30 && gridPosX >= 12)
       offset = -height*0.002 * (gridPosX - 13);
       
     pushMatrix();
     translate(x + startX, 0);
-    if (dir == -1)
+    if (dir == -1 || !idleDestra)
       scale(-1, 1);
       
     if (dir != 0) {
@@ -45,6 +46,11 @@ class Mario {
     y *= height / lastHeight;
   }
 } Mario mario;
+
+
+
+
+
 
 
 

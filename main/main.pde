@@ -32,4 +32,6 @@ void update() {
   resize();
   
   mario.move();
+  
+  println(mario.gridPosX);
 }
