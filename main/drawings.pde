@@ -44,6 +44,10 @@ void drawTravi(int inizio, int fine, int y, int inizioOffset, boolean direzioneX
 void drawScale(int inizio, int fine, int x) { // Inizio e fine con direzione dall'alto verso il basso
   for (int i = inizio; i <= fine; i++) {
     image(scala, ((x * squareW) + squareW/2), ((i * squareH) + squareH/2), squareW, squareH); 
+    if (primoFrame) {
+      PVector posizioneScalaGrid = new PVector(x,i);
+      gridPosScale.add(posizioneScalaGrid);
+    }
   }
 }
 

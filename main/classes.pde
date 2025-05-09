@@ -11,15 +11,23 @@ class Mario {
   
   void move() {
     x += SPEED * width/800 * dir; // Muove sull'asse x aggiungendo velocità e normalizzandola per la larghezza    
+    
+    if (suScala()) {
+      mario.x = (gridPosX+1) * (width / 28) - startX;
+      mario.y -= height / 256;
+    }
   }
   
   void draw() {    
+    // Calcolo della posizione sulla griglia
     gridPosX = round((x + startX) / (width / 28));
     gridPosY = round((y + startY) / (height / 32));
     
+    // Calcolo dell'offset 
     if (gridPosY == 30 && gridPosX >= 12)
       offset = -height*0.002 * (gridPosX - 13);
-      
+    
+    // In base allo stato in cui è mario, le animazioni si attivano o disattivano di conseguenza
     pushMatrix();
     translate(x + startX, 0);
     if (dir == -1 || !idleDestra)
@@ -44,6 +52,17 @@ class Mario {
 
     x *= width / lastWidth;
     y *= height / lastHeight;
+  }
+  
+  
+  boolean suScala() {
+    for (PVector gridPos : gridPosScale) {
+      if (gridPosX >= gridPos.x && gridPosX <= gridPos.x+2 && upPremuto) {
+        gridPosX = int(gridPos.x);
+        return true;
+      }
+    }
+    return false;
   }
 } Mario mario;
 

@@ -9,7 +9,7 @@ void keyPressed() {
     mario.idleDestra = true;
   }
   if (key == 'w') {
-    wPressed = true;
+    upPremuto = true;
   }
 }
 
@@ -22,6 +22,6 @@ void keyReleased() {
     mario.dir = 0; 
   }
   if (key == 'w') {
-    wPressed = false;
+    upPremuto = false;
   }
 }

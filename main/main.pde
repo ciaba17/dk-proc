@@ -25,6 +25,8 @@ void draw() {
   drawMap();
   drawGrid();
   mario.draw();
+  
+  primoFrame = false;
 }
 
 
@@ -33,5 +35,5 @@ void update() {
   
   mario.move();
   
-  println(mario.gridPosX);
+  //println(mario.gridPosX);
 }
