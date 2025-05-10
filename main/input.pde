@@ -11,6 +11,9 @@ void keyPressed() {
   if (key == 'w') {
     upPremuto = true;
   }
+  if (key == 's') {
+    downPremuto = true;
+  }
 }
 
 
@@ -23,5 +26,8 @@ void keyReleased() {
   }
   if (key == 'w') {
     upPremuto = false;
+  }
+  if (key == 's') {
+    downPremuto = false;
   }
 }

@@ -1,5 +1,8 @@
 void drawMap() {
-  drawScale(28,30,20);
+  drawScale(squareH * 27.05, squareH * 31, squareW * 23);
+    drawScale(squareH * 25.8, squareH * 31, squareW * 10);
+
+
   
   drawTravi(11, 17, 8, 32, true, 1);
   drawTravi(0, 26, 11, 15, true, 1);
@@ -41,14 +44,14 @@ void drawTravi(int inizio, int fine, int y, int inizioOffset, boolean direzioneX
 }
 
 
-void drawScale(int inizio, int fine, int x) { // Inizio e fine con direzione dall'alto verso il basso
-  for (int i = inizio; i <= fine; i++) {
-    image(scala, ((x * squareW) + squareW/2), ((i * squareH) + squareH/2), squareW, squareH); 
-    if (primoFrame) {
-      PVector posizioneScalaGrid = new PVector(x,i);
-      gridPosScale.add(posizioneScalaGrid);
-    }
+void drawScale(float yUp, float yDown, float x) {
+  x += squareW/2;
+  int nScale = int((yDown - yUp) / squareH);
+  
+  for (int i = 1; i <= nScale; i++) {
+    image(scala, x, squareH * i + yUp, squareW, squareH);
   }
+  scale.add(new Scala(yUp, yDown, x));
 }
 
 
