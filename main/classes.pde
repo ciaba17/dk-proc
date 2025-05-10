@@ -1,15 +1,16 @@
 class Mario {
-  float x, y;
-  int gridPosX = 5, gridPosY = 30;
+  float x = squareW * 5, y = squareH * 30;
+  int gridPosX, gridPosY;
   int dir;
   final float SPEED = 5;
   float frameIndex = 0;
-  PImage[] frames = new PImage[4];
+  PImage[] camminata = new PImage[4];
+  PImage[] scalata = new PImage[2];
   boolean idleDestra = true;
   boolean salendo = false;
   float yInizioScala;
   float xScala;
-
+  int a = 100;
 
   
   void move() {
@@ -31,47 +32,55 @@ class Mario {
       if (downPremuto) {
         if (y < yInizioScala)
           mario.y += height / 256;
-        else
+        else {
           salendo = false;
+        }
       }
     }
     else
       offset();
     
-    // Calcolo della posizione sulla griglia
-    gridPosX = round(x / (width / 28));
-    gridPosY = round(y / (height / 32));
+      gridPosX = round(x / (width / 28));
+      gridPosY = round(y / (height / 32));
   }
   
   void draw() {    
     // Animazioni
     pushMatrix();
     translate(x, 0);
-    if (dir == -1 || !idleDestra)
-      scale(-1, 1);
-      
-    if (dir != 0) {
-      if (int(frameIndex) == 4)
-        frameIndex = 0;
-        
-      image(frames[int(frameIndex)], 0, y + offset, squareW * 2, squareH * 2);
-      frameIndex += 0.6;
+    if (salendo) {
+      if (upPremuto || downPremuto) {
+        frameIndex += 0.2;
+        if (frameIndex > scalata.length)
+          frameIndex = 0;
+        image(scalata[int(frameIndex)], 0, y, squareW * 2, squareH * 2);
+      }
+      else
+        image(scalata[int(frameIndex)], 0, y, squareW * 2, squareH * 2);
     }
-    else
-      image(frames[0], 0, y + offset, squareW * 2, squareH * 2);
+    else {
+      if (dir == -1 || !idleDestra)
+        scale(-1, 1);
+      
+      if (dir != 0) {
+        frameIndex += 0.5;
+        if (frameIndex > camminata.length-1)
+          frameIndex = 0;
+        image(camminata[int(frameIndex)], 0, y, squareW * 2, squareH * 2);
+        
+      }
+      else {
+        image(camminata[0], 0, y, squareW * 2, squareH * 2);
+      }
+    }
     popMatrix();
   }
 
-  void updatePosition() {
-    x = gridPosX * squareW;
-    y = gridPosY * squareH;
-    
-  }
 
   boolean suScala() {
     for (Scala scala : scale) {
       if (x > scala.x - squareW/2 && x < scala.x + squareW/2) {
-        if (y > scala.yUp && y < scala.yDown) {
+        if (y > scala.yUp - squareH * 0.45 && y < scala.yDown) {
           xScala = scala.x;
           return true;
         }
@@ -82,13 +91,21 @@ class Mario {
   }
 
   void offset() {
-    // Calcolo dell'offset 
     if (gridPosY >= 28) {
-      if (gridPosX >= 12)
-        offset = -height*0.002 * (gridPosX - 13);
+      if (gridPosX >= 14)
+        y -= height*0.00035 * dir;
     }
     else if (gridPosY >= 23) {
-       offset = height*0.002 * (gridPosX - 13);
+       y += height*0.00035 * dir;
+    }
+    else if (gridPosY >= 20) {
+       y -= height*0.00035 * dir;
+    }
+    else if (gridPosY >= 16) {
+       y += height*0.00035 * dir;
+    }
+    else if (gridPosY >= 12) {
+       y -= height*0.00035 * dir;
     }
     
   }

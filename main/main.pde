@@ -1,17 +1,12 @@
 void setup() {
   size(600, 800);
-  surface.setResizable(true);
+  //surface.setResizable(true);
   noSmooth();
   frameRate(30);
   imageMode(CENTER);
-  
+  resize();
   mario = new Mario(); // Crea l'oggetto mario
-  
-  scala = loadImage("../data/scala.png");
-  trave = loadImage("../data/trave.png");
-  for (int i = 0; i < mario.frames.length; i++) {
-     mario.frames[i] = loadImage("../data/marioSprites/" + i +  ".png");
-  }
+  loadImmagini();
 }
 
 
@@ -33,5 +28,4 @@ void update() {
   resize();  
   mario.move();
   println(mario.gridPosX, mario.gridPosY);
-  println(mario.x,mario.y);
 }

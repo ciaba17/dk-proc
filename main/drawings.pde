@@ -1,8 +1,18 @@
 void drawMap() {
-  drawScale(squareH * 27.05, squareH * 31, squareW * 23);
+  // Prima linea
   drawScale(squareH * 26.1, squareH * 32, squareW * 10);
-
-
+  drawScale(squareH * 26.9, squareH * 30.5, squareW * 23);
+  // Seconda trave
+  drawScale(squareH * 22.85, squareH * 26, squareW * 4);
+  drawScale(squareH * 22.4, squareH * 27, squareW * 12);
+  // Terza trave
+  drawScale(squareH * 18.4, squareH * 23.2, squareW * 14);
+  drawScale(squareH * 18.8, squareH * 22.5, squareW * 23);
+  // Quarta trave
+  drawScale(squareH * 14.85, squareH * 18.5, squareW * 4);
+  drawScale(squareH * 14.65, squareH * 18.65, squareW * 9);
+  // Quinta trave
+  drawScale(squareH * 10.9, squareH * 14.65, squareW * 23);
   
   drawTravi(11, 17, 8, 32, true, 1);
   drawTravi(0, 26, 11, 15, true, 1);
@@ -10,7 +20,7 @@ void drawMap() {
   drawTravi(0, 26, 18, 0, true, 1);
   drawTravi(2, 27, 22, 0, false, 1);
   drawTravi(0, 26, 26, 0, true, 1);
-  drawTravi(0, 28, 31, 10, true, -1);
+  drawTravi(0, 28, 31, 12, true, -1);
 }
 
 void drawTravi(int inizio, int fine, int y, int inizioOffset, boolean direzioneX, int direzioneY) {
