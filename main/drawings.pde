@@ -1,6 +1,6 @@
 void drawMap() {
   drawScale(squareH * 27.05, squareH * 31, squareW * 23);
-    drawScale(squareH * 25.8, squareH * 31, squareW * 10);
+  drawScale(squareH * 26.1, squareH * 32, squareW * 10);
 
 
   

@@ -4,6 +4,7 @@ float lastWidth = 1, lastHeight = 1;
 float squareW, squareH;
 ArrayList<Scala> scale = new ArrayList<Scala>();
 
+
 boolean primoFrame = true;
 boolean upPremuto = false;
 boolean downPremuto = false;

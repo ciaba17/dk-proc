@@ -2,9 +2,7 @@ void setup() {
   size(600, 800);
   surface.setResizable(true);
   noSmooth();
-
   frameRate(30);
-  
   imageMode(CENTER);
   
   mario = new Mario(); // Crea l'oggetto mario
@@ -27,12 +25,13 @@ void draw() {
   mario.draw();
   
   primoFrame = false;
+
 }
 
 
 void update() {
-  resize();
-  
+  resize();  
   mario.move();
   println(mario.gridPosX, mario.gridPosY);
+  println(mario.x,mario.y);
 }
