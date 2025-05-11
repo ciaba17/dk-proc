@@ -12,6 +12,7 @@ void resize() {
 void loadImmagini() {
   scala = loadImage("../data/scala.png");
   trave = loadImage("../data/trave.png");
+  barile = loadImage("../data/scala.png");
   
   // Camminata
   for (int i = 0; i < mario.camminata.length; i++) {

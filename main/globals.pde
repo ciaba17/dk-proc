@@ -1,8 +1,11 @@
-PImage scala, trave;
+PImage scala, trave, barile;
 float lastWidth = 1, lastHeight = 1;
 float squareW, squareH;
-ArrayList<Scala> scale = new ArrayList<Scala>();
 
+ArrayList<Scala> scale = new ArrayList<Scala>();
+ArrayList<Barile> barili = new ArrayList<Barile>();
+
+float tempoSpawn = 0;
 
 boolean primoFrame = true;
 boolean upPremuto = false;

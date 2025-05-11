@@ -107,7 +107,11 @@ class Mario {
     else if (gridPosY >= 12) {
        y -= height*0.00035 * dir;
     }
-    
+    else if (gridPosY >= 9) {
+      if (gridPosX >= 18) {
+        y += height*0.00035 * dir;
+      }
+    }
   }
 } Mario mario;
 
@@ -125,15 +129,74 @@ class Scala {
 
 
 class Barile {
-  int speed = 5;
-  int x, y;
-  PImage sprite;
+  float x = squareW * 9, y = squareH * 10 + squareH * 0.25;
+  int gridPosX = 9, gridPosY = 10;
+  final float SPEED = 2.0; 
+  int dir = 1;
+  float distanzaCaduta;
+  boolean destra = true;
   
-  void rotola(int dir) {   
-    x += speed * dir;
+  void rotola() {   
+    x += SPEED * dir;
+    
+    
+    if (gridPosX == 28) {
+      distanzaCaduta = squareH * 2.2;
+      x -= squareW * 0.1;
+      destra = false;
+    }
+    else if (gridPosX == 1) {
+      distanzaCaduta = squareH * 2.18;
+      x += squareW * 0.1;
+      destra = true;
+    }
+      
+    if (distanzaCaduta >= 0) {
+         y += squareH * 0.1;
+         distanzaCaduta -= squareH * 0.1;
+         dir = 0;
+    }
+    else {
+      if (destra)
+        dir = 1;
+      else 
+        dir = -1; 
+    }
+      
+      
+      
+      
+    offset();
+
+    gridPosX = round(x / (width / 28));
+    gridPosY = round(y / (height / 32));
+  }
+  
+  void offset() {
+    if (gridPosY >= 28) {
+      if (gridPosX >= 14)
+        y -= height*0.00019 * dir;
+    }
+    else if (gridPosY >= 24) {
+      y += height*0.00019 * dir;
+    }
+    else if (gridPosY >= 20) {
+      y -= height*0.00019 * dir;
+    }
+    else if (gridPosY >= 16) {
+      y += height*0.00019 * dir;
+    }
+    else if (gridPosY >= 12) {
+      y -= height*0.00019 * dir;
+    }
+    else if (gridPosY >= 9) {
+      if (gridPosX >= 18) {
+        y += height*0.00019 * dir;
+      }
+    }
   }
   
   void draw() {
-    image(sprite, x, y, squareW, squareH);
+    image(barile, x, y, squareW, squareH);
   }
 }
