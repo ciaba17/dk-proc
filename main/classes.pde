@@ -138,6 +138,8 @@ class Barile {
   boolean scendendo = false;
   int rand = -1;
   boolean decided = false;
+  ArrayList<Scala> usedScales = new ArrayList<Scala>();
+  boolean[] usedScaleAdded = new boolean[5];
 
   
   void rotola() {   
@@ -180,45 +182,47 @@ class Barile {
     scendiScale();
   }
   
-  
   void scendiScale() {
-    boolean overStair = false;
-    for (Scala scala : scale) {
-      boolean inX = x > scala.x - squareW/2 && x < scala.x + squareW/2;
-      boolean inYzone = y > scala.yUp - squareH * 0.45 && y < scala.yDown - squareH * 0.5;
-    
-      if (inX) {
-        overStair = true;
-      
-        // Decido una volta sola se scendere o no
-        if (inYzone && !decided) {
-          rand = int(random(2));  // 0 o 1
-          decided = true;
-        }
-      
-        // Se ho deciso di scendere, e non sto già "scendendo", inizio la discesa
-        if (decided && rand == 1 && inYzone && !scendendo) {
-          scendendo = true;
-          i++;
-          x = scala.x;
-          destra = !destra;
-          println(i);
-        }
-      
-        // Se sto scendendo e ho raggiunto il fondo, esco dallo stato scala
-        if (scendendo && y >= scala.yDown - squareH * 0.5) {
-          scendendo = false;
-          decided  = false;
-        }
+  boolean overAny = false;
+  for (Scala s : scale) {
+    // 1) se già “usata” da questo barile, salto la scala
+    if (usedScales.contains(s)) continue;
+
+    boolean inX   = x > s.x - squareW/2 && x < s.x + squareW/2;
+    boolean inY   = y > s.yUp - squareH * 0.45 && y < s.yDown - squareH * 0.5;
+
+    if (inX) {
+      overAny = true;
+
+      // Decido una volta sola se scendere o no
+      if (inY && !decided) {
+        rand    = int(random(2));  // 0 o 1
+        decided = true;
+      }
+
+      // Se ho deciso di scendere, e non sto già "scendendo", inizio la discesa
+      if (decided && rand == 1 && inY && !scendendo) {
+        scendendo = true;
+        i++;
+        x = s.x;
+        destra = !destra;
+      }
+
+      // Se sto scendendo e ho raggiunto il fondo, esco dallo stato scala
+      if (scendendo && y >= s.yDown - squareH * 0.5) {
+        scendendo = false;
+        decided   = false;
+        rand      = -1;
       }
     }
-  
-  // Se esco orizzontalmente dalla hitbox della scala, resetto tutto
-  if (!overStair) {
-    scendendo = false;
-    decided  = false;
-    }
   }
+
+  // Se esco orizzontalmente da tutte le scale, resetto decisione
+  if (!overAny) {
+    decided = false;
+    rand    = -1;
+  }
+}
   
   void offset() {
     if (gridPosY >= 28) {
@@ -227,15 +231,35 @@ class Barile {
     }
     else if (gridPosY >= 24) {
       y += height*0.00019 * dir;
+      if (!usedScaleAdded[0]) {
+        usedScales.add(scale.get(5));
+        usedScales.add(scale.get(6));
+        usedScaleAdded[0] = true;
+      }
+      
     }
     else if (gridPosY >= 20) {
       y -= height*0.00019 * dir;
+      if (!usedScaleAdded[1]) {
+        usedScales.add(scale.get(3));
+        usedScales.add(scale.get(4));
+        usedScaleAdded[1] = true;
+      }
     }
     else if (gridPosY >= 16) {
       y += height*0.00019 * dir;
+      if (!usedScaleAdded[2]) {
+        usedScales.add(scale.get(1));
+        usedScales.add(scale.get(2));
+        usedScaleAdded[2] = true;
+      }
     }
     else if (gridPosY >= 12) {
       y -= height*0.00019 * dir;
+      if (!usedScaleAdded[3]) {
+        usedScales.add(scale.get(0));
+        usedScaleAdded[3] = true;
+      }
     }
     else if (gridPosY >= 9) {
       if (gridPosX >= 18) {
