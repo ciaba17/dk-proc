@@ -1,7 +1,19 @@
+// Variabili globali (da definire nel tuo sketch principale)
+// float squareW, squareH;
+// int width, height;
+// ArrayList<Scala> scale;
+// PImage barile; // Immagine per il barile
+// Mario mario; // Istanza di Mario
+
+// Variabili per Mario (da definire nel tuo sketch principale se non già fatto)
+// boolean upPremuto = false;
+// boolean downPremuto = false;
+
+
 class Mario {
   float x = squareW * 5, y = squareH * 30;
   int gridPosX, gridPosY;
-  int dir;
+  int dir; // 0 = fermo, 1 = destra, -1 = sinistra
   final float SPEED = 5;
   float frameIndex = 0;
   PImage[] camminata = new PImage[4];
@@ -10,68 +22,68 @@ class Mario {
   boolean salendo = false;
   float yInizioScala;
   float xScala;
-  int a = 100;
   boolean saltando = false;
 
-  
+
   void move() {
     // Camminata
     if (!salendo) {
-      x += SPEED * width / 800 * dir; // Muove sull'asse x aggiungendo velocità e normalizzandola per la larghezza    
+      x += SPEED * width / 800 * dir; // Muove sull'asse x aggiungendo velocità e normalizzandola per la larghezza
     }
-    
+
     // Salita scale
     if (suScala()) {
-      if (!salendo) {
-        yInizioScala = y;
+      if (!salendo) { // Appena arriva su una scala
+        yInizioScala = y; // Salva la y di partenza sulla piattaforma
       }
       if (upPremuto) {
         salendo = true;
-        mario.x = xScala;
-        mario.y -= height / 256;
+        mario.x = xScala; // Allinea Mario alla x della scala
+        mario.y -= height / 256; // Sale
       }
-      if (downPremuto) {
-        if (y < yInizioScala)
-          mario.y += height / 256;
-        else {
-          salendo = false;
+      if (downPremuto && salendo) { // Può scendere solo se è già in modalità 'salendo'
+        if (y < yInizioScala) { // Se è più in alto del punto in cui ha iniziato a salire dalla piattaforma
+          mario.y += height / 256; // Scende
+        } else { // Se torna alla y della piattaforma o sotto
+          salendo = false; // Esce dalla modalità scala
+          y = yInizioScala; // Si riposiziona precisamente sulla piattaforma
         }
       }
+      // Se non preme su o giu mentre è su una scala e in modalità salendo, rimane fermo
+    } else { // Se non è su una scala
+      salendo = false; // Assicura che non sia in modalità salita
+      offset(); // Applica l'offset della piattaforma
     }
-    else
-      offset();
-    
-      gridPosX = round(x / (width / 28));
-      gridPosY = round(y / (height / 32));
+
+    gridPosX = round(x / (width / 28));
+    gridPosY = round(y / (height / 32));
   }
-  
-  void draw() {    
-    // Animazioni
+
+  void draw() {
     pushMatrix();
-    translate(x, 0);
+    translate(x, 0); // Trasla solo sull'asse x per lo scaling
     if (salendo) {
-      if (upPremuto || downPremuto) {
+      if (upPremuto || downPremuto) { // Animazione solo se si muove sulla scala
         frameIndex += 0.2;
-        if (frameIndex > scalata.length)
+        if (frameIndex >= scalata.length)
           frameIndex = 0;
-        image(scalata[int(frameIndex)], 0, y, squareW * 2, squareH * 2);
       }
-      else
-        image(scalata[int(frameIndex)], 0, y, squareW * 2, squareH * 2);
-    }
-    else {
-      if (dir == -1 || !idleDestra)
-        scale(-1, 1);
-      
-      if (dir != 0) {
-        frameIndex += 0.5;
-        if (frameIndex > camminata.length-1)
+      // Disegna sempre l'immagine della scalata se 'salendo' è true
+      // Se non si muove, mostra l'ultimo frame dell'animazione
+      image(scalata[int(frameIndex)], 0, y, squareW * 2, squareH * 2);
+    } else { // Non sta salendo scale
+      if (dir == -1 || (!idleDestra && dir == 0)) { // Se va a sinistra o era a sinistra ed è fermo
+        scale(-1, 1); // Specchia l'immagine
+      }
+
+      if (dir != 0) { // Se si sta muovendo orizzontalmente
+        frameIndex += 0.5; // Velocità animazione camminata
+        if (frameIndex >= camminata.length)
           frameIndex = 0;
         image(camminata[int(frameIndex)], 0, y, squareW * 2, squareH * 2);
-        
-      }
-      else {
-        image(camminata[0], 0, y, squareW * 2, squareH * 2);
+        idleDestra = (dir == 1); // Aggiorna l'ultimo stato di direzione per l'idle
+      } else { // Se è fermo (idle)
+        image(camminata[0], 0, y, squareW * 2, squareH * 2); // Mostra il primo frame come idle
       }
     }
     popMatrix();
@@ -80,37 +92,37 @@ class Mario {
 
   boolean suScala() {
     for (Scala scala : scale) {
-      if (x > scala.x - squareW/2 && x < scala.x + squareW/2) {
-        if (y > scala.yUp - squareH * 0.45 && y < scala.yDown) {
-          xScala = scala.x;
+      // Controlla se Mario è all'interno della larghezza della scala
+      if (x > scala.x - squareW / 2 && x < scala.x + squareW / 2) {
+        // Controlla se Mario è verticalmente sulla scala
+        // y è la base di Mario, quindi deve essere tra yUp e yDown della scala
+        // Aggiustamento per permettere a Mario di "agganciarsi" un po' prima
+        if (y > scala.yUp - squareH * 0.45 && y < scala.yDown + squareH * 0.5) {
+          xScala = scala.x; // Salva la x della scala per allineare Mario
           return true;
         }
       }
     }
-    salendo = false;
+    // Se esce dal loop senza aver trovato una scala, non è su una scala
+    // salendo = false; // Viene gestito meglio in move()
     return false;
   }
 
   void offset() {
     if (gridPosY >= 28) {
       if (gridPosX >= 14)
-        y -= height*0.00035 * dir;
-    }
-    else if (gridPosY >= 23) {
-       y += height*0.00035 * dir;
-    }
-    else if (gridPosY >= 20) {
-       y -= height*0.00035 * dir;
-    }
-    else if (gridPosY >= 16) {
-       y += height*0.00035 * dir;
-    }
-    else if (gridPosY >= 12) {
-       y -= height*0.00035 * dir;
-    }
-    else if (gridPosY >= 9) {
+        y -= height * 0.00035 * dir;
+    } else if (gridPosY >= 23) {
+      y += height * 0.00035 * dir;
+    } else if (gridPosY >= 20) {
+      y -= height * 0.00035 * dir;
+    } else if (gridPosY >= 16) {
+      y += height * 0.00035 * dir;
+    } else if (gridPosY >= 12) {
+      y -= height * 0.00035 * dir;
+    } else if (gridPosY >= 9) {
       if (gridPosX >= 18) {
-        y += height*0.00035 * dir;
+        y += height * 0.00035 * dir;
       }
     }
   }
@@ -118,9 +130,9 @@ class Mario {
 
 
 class Scala {
-  float yUp, yDown;
-  float x;
-  
+  float yUp, yDown; // Coordinate y della parte superiore e inferiore della scala
+  float x;          // Coordinata x (centro della scala)
+
   Scala(float yUp_, float yDown_, float x_) {
     yUp = yUp_;
     yDown = yDown_;
@@ -130,146 +142,142 @@ class Scala {
 
 
 class Barile {
-  float x = squareW * 9, y = squareH * 10 + squareH * 0.25;
+  float x = squareW * 9, y = squareH * 11; // Posizione iniziale
   int gridPosX = 9, gridPosY = 10;
-  final float SPEED = 2.0; 
-  int dir = 1;
-  float distanzaCaduta;
-  boolean destra = true;
-  boolean scendendo = false;
-  int rand = -1;
-  boolean decided = false;
-  ArrayList<Scala> usedScales = new ArrayList<Scala>();
-  boolean[] usedScaleAdded = new boolean[5];
+  final float SPEED = 2.0; // Velocità di rotolamento orizzontale
+  int dir = 1; // Direzione di rotolamento: 1 per destra, -1 per sinistra, 0 per fermo/caduta
+  float distanzaCaduta = 0; // Distanza rimanente da cadere quando cade da un bordo
+  boolean destra = true; // Tendenza direzionale per la prossima piattaforma (true=destra)
 
-  
-  void rotola() {   
-    if (!scendendo)
-      x += SPEED * dir;
-    else
-      y += squareH * 0.1;
-    
-    
-    if (gridPosX == 28) {
-      distanzaCaduta = squareH * 2.2;
-      x -= squareW * 0.1;
-      destra = false;
-    }
-    else if (gridPosX == 1) {
-      distanzaCaduta = squareH * 2.18;
-      x += squareW * 0.1;
-      destra = true;
-    }
-      
-    if (distanzaCaduta >= 0) {
-         y += squareH * 0.1;
-         distanzaCaduta -= squareH * 0.1;
-         dir = 0;
-    }
-    else {
-      if (destra)
-        dir = 1;
-      else 
-        dir = -1; 
-    }
-      
-      
-      
-    gridPosX = round(x / (width / 28));
-    gridPosY = round(y / (height / 32));
+  boolean scendendo = false; // True se il barile sta attualmente scendendo una scala
+  Scala scalaCorrente = null; // Riferimento alla scala che sta scendendo
 
-    offset();
+  int randDecisioneScala = -1; // Risultato della decisione casuale (0 non scende, 1 scende)
+  boolean decisionePresaPerScala = false; // Flag per assicurare che la decisione di scendere venga presa una sola volta per "incontro" con una zona scala
 
-    scendiScale();
-  }
-  
-  void scendiScale() {
-  boolean overAny = false;
-  for (Scala s : scale) {
-    // 1) se già “usata” da questo barile, salto la scala
-    if (usedScales.contains(s)) continue; // PROBLEMA QUI
-
-    boolean inX   = x > s.x - squareW/2 && x < s.x + squareW/2;
-    boolean inY   = y > s.yUp - squareH * 0.45 && y < s.yDown - squareH * 0.5;
-
-    if (inX) {
-      overAny = true;
-
-      // Decido una volta sola se scendere o no
-      if (inY && !decided) {
-        rand    = int(random(2));  // 0 o 1
-        decided = true;
-      }
-
-      // Se ho deciso di scendere, e non sto già "scendendo", inizio la discesa
-      if (decided && rand == 1 && inY && !scendendo) {
-        scendendo = true;
-        i++;
-        x = s.x;
-        destra = !destra;
-      }
-
-      // Se sto scendendo e ho raggiunto il fondo, esco dallo stato scala
-      if (scendendo && y >= s.yDown - squareH * 0.5) {
+  void rotola() {
+    if (scendendo) {
+      // Sta scendendo una scala
+      y += squareH * 0.1; // Velocità di discesa sulla scala
+      if (scalaCorrente != null && y >= scalaCorrente.yDown - squareH * 0.1) { // Arrivato in fondo alla scala (o quasi)
         scendendo = false;
-        decided   = false;
-        rand      = -1;
+        y = scalaCorrente.yDown; // Allinea precisamente alla fine della scala
+        scalaCorrente = null;
+        decisionePresaPerScala = false; // Resetta per future scale
+        randDecisioneScala = -1;
+        // Imposta la direzione di rotolamento per la nuova piattaforma
+        if (destra) dir = 1;
+        else dir = -1;
+      }
+    } else if (distanzaCaduta > 0) {
+      // Sta cadendo da un bordo (non scendendo una scala)
+      y += squareH * 0.1; // Velocità di caduta
+      distanzaCaduta -= squareH * 0.1;
+      if (distanzaCaduta <= 0) {
+        distanzaCaduta = 0;
+        // Imposta la direzione di rotolamento per la nuova piattaforma
+        if (destra) dir = 1;
+        else dir = -1;
+        // Aggiustamento y per allinearsi alla piattaforma sottostante potrebbe essere necessario qui,
+        // a seconda di come sono definite le altezze delle piattaforme.
+        // Per ora, si assume che l'offset gestisca le altezze corrette.
+      }
+    } else {
+      // Non sta scendendo scale e non sta cadendo da un bordo -> rotola orizzontalmente
+      x += SPEED * dir;
+      offset(); // Applica l'inclinazione della piattaforma (se presente)
+      scendiScale(); // Controlla se incontra una scala e deve iniziare a scendere
+    }
+
+    // Logica di caduta ai bordi della piattaforma (solo se non sta già scendendo una scala)
+    // e non sta già cadendo
+    if (!scendendo && distanzaCaduta <= 0) {
+      gridPosX = round(x / (width / 28.0)); // Aggiorna gridPosX prima del controllo bordi
+
+      if (gridPosX >= 28 && dir == 1) { // Bordo destro (originale: gridPosX == 28)
+        distanzaCaduta = squareH * 2.2; // Imposta l'altezza della caduta
+        destra = false; // Cambia direzione per la prossima piattaforma
+        dir = 0; // Ferma il movimento orizzontale durante la caduta
+        x = (28 * (width / 28.0)) - squareW / 2; // Correggi posizione per evitare di superare troppo
+      } else if (gridPosX <= 1 && dir == -1) { // Bordo sinistro (originale: gridPosX == 1)
+        distanzaCaduta = squareH * 2.18;
+        destra = true; // Cambia direzione per la prossima piattaforma
+        dir = 0; // Ferma il movimento orizzontale durante la caduta
+        x = (1 * (width / 28.0)) + squareW / 2; // Correggi posizione
+      }
+    }
+    
+    // Aggiorna sempre le posizioni grid alla fine del movimento
+    gridPosX = round(x / (width / 28.0));
+    gridPosY = round(y / (height / 32.0));
+  }
+
+  void scendiScale() {
+    if (scendendo || distanzaCaduta > 0) return; // Già impegnato in discesa o caduta
+
+    boolean sopraUnaScalaAttualmente = false;
+
+    for (Scala s : scale) {
+      // Il barile è orizzontalmente allineato con la scala?
+      boolean inX = x > s.x - squareW * 0.6 && x < s.x + squareW * 0.6; // Tolleranza leggermente aumentata
+
+      // Il barile è verticalmente posizionato per poter scendere questa scala?
+      // La y del barile (centro) deve essere vicina alla yUp della scala.
+      // Consideriamo un intervallo piccolo sopra s.yUp.
+      boolean inYDecisionZone = (y > s.yUp - squareH * 0.6) && (y < s.yUp + squareH * 0.3);
+
+
+      if (inX && inYDecisionZone) {
+        sopraUnaScalaAttualmente = true;
+        if (!decisionePresaPerScala) {
+          randDecisioneScala = int(random(100)); // Es. 0-39 non scende (40%), 40-99 scende (60%)
+          decisionePresaPerScala = true;
+          // println("Barile (" + nf(x,0,1) + "," + nf(y,0,1) + ") sopra scala (" + s.x + "," + s.yUp + "). Decisione: " + randDecisioneScala);
+        }
+
+        // Se ha deciso di scendere (es. random > 39) e la decisione è stata presa
+        if (decisionePresaPerScala && randDecisioneScala >= 40) {
+          scendendo = true;
+          scalaCorrente = s;
+          x = s.x + squareW * 0.5; // Allinea il barile al centro della scala
+          destra = !destra; // Inverti la direzione di rotolamento per la prossima piattaforma
+          dir = 0; // Ferma movimento orizzontale mentre scende la scala
+          // println("Barile inizia a scendere scala a x:" + x);
+          break; // Inizia a scendere questa scala, esce dal loop
+        }
+      }
+    }
+
+    // Se il barile non è più orizzontalmente sopra nessuna scala con cui potrebbe interagire,
+    // resetta il flag della decisione. Questo permette una nuova decisione al prossimo incontro.
+    if (!sopraUnaScalaAttualmente) {
+      decisionePresaPerScala = false;
+      randDecisioneScala = -1;
+    }
+  }
+
+  void offset() {
+    if (dir != 0 && !scendendo && distanzaCaduta <= 0) {
+      if (gridPosY >= 28) {
+        if (gridPosX >= 14)
+          y -= height * 0.00019 * dir;
+      } else if (gridPosY >= 24) {
+        y += height * 0.00019 * dir;
+      } else if (gridPosY >= 20) {
+        y -= height * 0.00019 * dir;
+      } else if (gridPosY >= 16) {
+        y += height * 0.00019 * dir;
+      } else if (gridPosY >= 12) {
+        y -= height * 0.00019 * dir;
+      } else if (gridPosY >= 9) {
+        if (gridPosX >= 18) {
+          y += height * 0.00019 * dir;
+        }
       }
     }
   }
 
-  // Se esco orizzontalmente da tutte le scale, resetto decisione
-  if (!overAny) {
-    decided = false;
-    rand    = -1;
-  }
-}
-  
-  void offset() {
-    if (gridPosY >= 28) {
-      if (gridPosX >= 14)
-        y -= height*0.00019 * dir;
-    }
-    else if (gridPosY >= 24) {
-      y += height*0.00019 * dir;
-      if (!usedScaleAdded[0]) {
-        usedScales.add(scale.get(2));
-        usedScales.add(scale.get(3));
-        usedScaleAdded[0] = true;
-      }
-      
-    }
-    else if (gridPosY >= 20) {
-      y -= height*0.00019 * dir;
-      if (!usedScaleAdded[1]) {
-        usedScales.add(scale.get(4));
-        usedScales.add(scale.get(5));
-        usedScaleAdded[1] = true;
-      }
-    }
-    else if (gridPosY >= 16) {
-      y += height*0.00019 * dir;
-      if (!usedScaleAdded[2]) {
-        usedScales.add(scale.get(6));
-        usedScales.add(scale.get(7));
-        usedScaleAdded[2] = true;
-      }
-    }
-    else if (gridPosY >= 12) {
-      y -= height*0.00019 * dir;
-      if (!usedScaleAdded[3]) {
-        usedScales.add(scale.get(8));
-        usedScaleAdded[3] = true;
-      }
-    }
-    else if (gridPosY >= 9) {
-      if (gridPosX >= 18) {
-        y += height*0.00019 * dir;
-      }
-    }
-  }
-  
   void draw() {
-    image(barile, x, y, squareW, squareH);
+    image(barile, x - squareW / 2, y - squareH / 2, squareW, squareH);
   }
 }
