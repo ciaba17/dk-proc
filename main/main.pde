@@ -1,6 +1,6 @@
 void setup() {
   size(600, 800);
-  //surface.setResizable(true);
+  surface.setResizable(true);
   noSmooth();
   frameRate(30);
   imageMode(CENTER);
@@ -33,17 +33,16 @@ void draw() {
 void update() {
   resize();  
   mario.move();
-  println(mario.gridPosX, mario.gridPosY);
   if (barili.size() > 0) {
-    println(barili.get(0).gridPosX);
+    //println(barili.get(0).destra);
   }
 
 
   
-  /// Spawn barili
-  if (tempoSpawn > 30) {
+  // Spawn barili
+  if (tempoSpawn < 30) {
     barili.add(new Barile());
-    tempoSpawn = 0;
+    //tempoSpawn = 0;
   }
-  tempoSpawn += 0.5;
+  tempoSpawn = 31;
 }

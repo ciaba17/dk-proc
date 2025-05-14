@@ -135,9 +135,16 @@ class Barile {
   int dir = 1;
   float distanzaCaduta;
   boolean destra = true;
+  boolean scendendo = false;
+  int rand = -1;
+  boolean decided = false;
+
   
   void rotola() {   
-    x += SPEED * dir;
+    if (!scendendo)
+      x += SPEED * dir;
+    else
+      y += squareH * 0.1;
     
     
     if (gridPosX == 28) {
@@ -165,11 +172,52 @@ class Barile {
       
       
       
-      
-    offset();
-
     gridPosX = round(x / (width / 28));
     gridPosY = round(y / (height / 32));
+
+    offset();
+
+    scendiScale();
+  }
+  
+  
+  void scendiScale() {
+    boolean overStair = false;
+    for (Scala scala : scale) {
+      boolean inX = x > scala.x - squareW/2 && x < scala.x + squareW/2;
+      boolean inYzone = y > scala.yUp - squareH * 0.45 && y < scala.yDown - squareH * 0.5;
+    
+      if (inX) {
+        overStair = true;
+      
+        // Decido una volta sola se scendere o no
+        if (inYzone && !decided) {
+          rand = int(random(2));  // 0 o 1
+          decided = true;
+        }
+      
+        // Se ho deciso di scendere, e non sto già "scendendo", inizio la discesa
+        if (decided && rand == 1 && inYzone && !scendendo) {
+          scendendo = true;
+          i++;
+          x = scala.x;
+          destra = !destra;
+          println(i);
+        }
+      
+        // Se sto scendendo e ho raggiunto il fondo, esco dallo stato scala
+        if (scendendo && y >= scala.yDown - squareH * 0.5) {
+          scendendo = false;
+          decided  = false;
+        }
+      }
+    }
+  
+  // Se esco orizzontalmente dalla hitbox della scala, resetto tutto
+  if (!overStair) {
+    scendendo = false;
+    decided  = false;
+    }
   }
   
   void offset() {
