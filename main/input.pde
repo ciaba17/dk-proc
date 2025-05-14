@@ -14,6 +14,9 @@ void keyPressed() {
   if (key == 's') {
     downPremuto = true;
   }
+  if (key == ' ') {
+    mario.saltando = true;
+  }
 }
 
 

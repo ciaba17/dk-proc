@@ -42,7 +42,10 @@ void update() {
   // Spawn barili
   if (tempoSpawn < 30) {
     barili.add(new Barile());
+    
     //tempoSpawn = 0;
   }
+  
+  println(barili.get(0).gridPosY);
   tempoSpawn = 31;
 }

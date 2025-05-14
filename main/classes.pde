@@ -11,6 +11,7 @@ class Mario {
   float yInizioScala;
   float xScala;
   int a = 100;
+  boolean saltando = false;
 
   
   void move() {
@@ -186,7 +187,7 @@ class Barile {
   boolean overAny = false;
   for (Scala s : scale) {
     // 1) se già “usata” da questo barile, salto la scala
-    if (usedScales.contains(s)) continue;
+    if (usedScales.contains(s)) continue; // PROBLEMA QUI
 
     boolean inX   = x > s.x - squareW/2 && x < s.x + squareW/2;
     boolean inY   = y > s.yUp - squareH * 0.45 && y < s.yDown - squareH * 0.5;
@@ -232,8 +233,8 @@ class Barile {
     else if (gridPosY >= 24) {
       y += height*0.00019 * dir;
       if (!usedScaleAdded[0]) {
-        usedScales.add(scale.get(5));
-        usedScales.add(scale.get(6));
+        usedScales.add(scale.get(2));
+        usedScales.add(scale.get(3));
         usedScaleAdded[0] = true;
       }
       
@@ -241,23 +242,23 @@ class Barile {
     else if (gridPosY >= 20) {
       y -= height*0.00019 * dir;
       if (!usedScaleAdded[1]) {
-        usedScales.add(scale.get(3));
         usedScales.add(scale.get(4));
+        usedScales.add(scale.get(5));
         usedScaleAdded[1] = true;
       }
     }
     else if (gridPosY >= 16) {
       y += height*0.00019 * dir;
       if (!usedScaleAdded[2]) {
-        usedScales.add(scale.get(1));
-        usedScales.add(scale.get(2));
+        usedScales.add(scale.get(6));
+        usedScales.add(scale.get(7));
         usedScaleAdded[2] = true;
       }
     }
     else if (gridPosY >= 12) {
       y -= height*0.00019 * dir;
       if (!usedScaleAdded[3]) {
-        usedScales.add(scale.get(0));
+        usedScales.add(scale.get(8));
         usedScaleAdded[3] = true;
       }
     }
