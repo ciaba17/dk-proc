@@ -138,6 +138,7 @@ class Scala {
     yDown = yDown_;
     x = x_;
   }
+  
 }
 
 
@@ -276,6 +277,7 @@ class Barile {
       }
     }
   }
+  
 
   void draw() {
     image(barile, x - squareW / 2, y - squareH / 2, squareW, squareH);

@@ -1,4 +1,4 @@
-PImage scala, trave, barile;
+PImage scala, trave, barile, donkeykongStill, donkeykongLeft, donkeykongRight;
 float lastWidth = 1, lastHeight = 1;
 float squareW, squareH;
 
@@ -15,3 +15,5 @@ boolean downPremuto = false;
 
 
 int i = 0;
+
+final int barrelTimeSpawn = 30;

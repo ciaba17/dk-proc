@@ -7,6 +7,7 @@ void setup() {
   resize();
   mario = new Mario(); // Crea l'oggetto mario
   loadImmagini();
+  setupScale();
 }
 
 
@@ -31,7 +32,10 @@ void draw() {
 
 
 void update() {
-  resize();  
+  if (width != lastWidth || height != lastHeight) {
+    resize(); 
+  }
+   
   mario.move();
   if (barili.size() > 0) {
     //println(barili.get(0).destra);
@@ -40,7 +44,7 @@ void update() {
 
   
   // Spawn barili
-  if (tempoSpawn > 30) {
+  if (tempoSpawn > barrelTimeSpawn) {
     barili.add(new Barile());
     
     tempoSpawn = 0;

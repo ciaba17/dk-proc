@@ -1,19 +1,20 @@
 void drawMap() {
-  // Prima linea
-  drawScale(squareH * 26.1, squareH * 31.1, squareW * 10);
-  drawScale(squareH * 26.8, squareH * 30.5, squareW * 23);
-  // Seconda trave
-  drawScale(squareH * 22.85, squareH * 25.85, squareW * 4);
-  drawScale(squareH * 22.4, squareH * 27, squareW * 12);
-  // Terza trave
-  drawScale(squareH * 18.4, squareH * 23.2, squareW * 14);
-  drawScale(squareH * 18.8, squareH * 22.5, squareW * 23);
-  // Quarta trave
-  drawScale(squareH * 14.85, squareH * 18.5, squareW * 4);
-  drawScale(squareH * 14.65, squareH * 18.65, squareW * 9);
-  // Quinta trave
-  drawScale(squareH * 10.9, squareH * 14.2, squareW * 23);
-  
+  // Disegna le scale, ma senza aggiungerle all'array scale
+  for (Scala s : scale) {
+    float yUp = s.yUp;
+    float yDown = s.yDown;
+    float x = s.x;
+
+    x += squareW / 2;
+    int nScale = int((yDown - yUp) / squareH);
+
+    // Disegna le scale (ma non aggiunge nuove scale)
+    for (int i = 1; i <= nScale; i++) {
+      image(scala, x, squareH * i + yUp, squareW, squareH);
+    }
+  }
+
+  // Disegna le travi
   drawTravi(11, 17, 8, 32, true, 1);
   drawTravi(0, 26, 11, 15, true, 1);
   drawTravi(2, 27, 14, 0, false, 1);
@@ -22,6 +23,7 @@ void drawMap() {
   drawTravi(0, 26, 26, 0, true, 1);
   drawTravi(0, 28, 31, 12, true, -1);
 }
+
 
 void drawTravi(int inizio, int fine, int y, int inizioOffset, boolean direzioneX, int direzioneY) {
   float offset = 0;
