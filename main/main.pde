@@ -37,11 +37,6 @@ void update() {
   }
    
   mario.move();
-  if (barili.size() > 0) {
-    //println(barili.get(0).destra);
-  }
-
-
   
   // Spawn barili
   if (tempoSpawn > barrelTimeSpawn) {
@@ -50,5 +45,5 @@ void update() {
     tempoSpawn = 0;
   }
   
-  tempoSpawn += 1;
+  tempoSpawn += 2;
 }

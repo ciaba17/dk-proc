@@ -5,7 +5,7 @@ void drawMap() {
     float yDown = s.yDown;
     float x = s.x;
 
-    x += squareW / 2;
+    x += squareW * 0;
     int nScale = int((yDown - yUp) / squareH);
 
     // Disegna le scale (ma non aggiunge nuove scale)

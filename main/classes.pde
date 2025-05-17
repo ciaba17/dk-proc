@@ -1,15 +1,3 @@
-// Variabili globali (da definire nel tuo sketch principale)
-// float squareW, squareH;
-// int width, height;
-// ArrayList<Scala> scale;
-// PImage barile; // Immagine per il barile
-// Mario mario; // Istanza di Mario
-
-// Variabili per Mario (da definire nel tuo sketch principale se non già fatto)
-// boolean upPremuto = false;
-// boolean downPremuto = false;
-
-
 class Mario {
   float x = squareW * 5, y = squareH * 30;
   int gridPosX, gridPosY;
@@ -138,17 +126,16 @@ class Scala {
     yDown = yDown_;
     x = x_;
   }
-  
 }
 
 
 class Barile {
-  float x = squareW * 9, y = squareH * 11; // Posizione iniziale
+  float x = squareW * 9, y = squareH * 11;
   int gridPosX = 9, gridPosY = 10;
-  final float SPEED = 2.0; // Velocità di rotolamento orizzontale
+  final float SPEED = 2.0;
   int dir = 1; // Direzione di rotolamento: 1 per destra, -1 per sinistra, 0 per fermo/caduta
   float distanzaCaduta = 0; // Distanza rimanente da cadere quando cade da un bordo
-  boolean destra = true; // Tendenza direzionale per la prossima piattaforma (true=destra)
+  boolean destra = true;
 
   boolean scendendo = false; // True se il barile sta attualmente scendendo una scala
   Scala scalaCorrente = null; // Riferimento alla scala che sta scendendo
@@ -196,12 +183,12 @@ class Barile {
       gridPosX = round(x / (width / 28.0)); // Aggiorna gridPosX prima del controllo bordi
 
       if (gridPosX >= 28 && dir == 1) { // Bordo destro (originale: gridPosX == 28)
-        distanzaCaduta = squareH * 2.2; // Imposta l'altezza della caduta
+        distanzaCaduta = squareH * 2.4; // Imposta l'altezza della caduta
         destra = false; // Cambia direzione per la prossima piattaforma
         dir = 0; // Ferma il movimento orizzontale durante la caduta
         x = (28 * (width / 28.0)) - squareW / 2; // Correggi posizione per evitare di superare troppo
       } else if (gridPosX <= 1 && dir == -1) { // Bordo sinistro (originale: gridPosX == 1)
-        distanzaCaduta = squareH * 2.18;
+        distanzaCaduta = squareH * 2.4;
         destra = true; // Cambia direzione per la prossima piattaforma
         dir = 0; // Ferma il movimento orizzontale durante la caduta
         x = (1 * (width / 28.0)) + squareW / 2; // Correggi posizione
@@ -225,7 +212,7 @@ class Barile {
       // Il barile è verticalmente posizionato per poter scendere questa scala?
       // La y del barile (centro) deve essere vicina alla yUp della scala.
       // Consideriamo un intervallo piccolo sopra s.yUp.
-      boolean inYDecisionZone = (y > s.yUp - squareH * 0.6) && (y < s.yUp + squareH * 0.3);
+      boolean inYDecisionZone = (y > s.yUp - squareH * 0.6) && (y < s.yUp + squareH * 0.6);
 
 
       if (inX && inYDecisionZone) {
@@ -277,7 +264,6 @@ class Barile {
       }
     }
   }
-  
 
   void draw() {
     image(barile, x - squareW / 2, y - squareH / 2, squareW, squareH);
