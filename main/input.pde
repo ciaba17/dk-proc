@@ -15,7 +15,8 @@ void keyPressed() {
     downPremuto = true;
   }
   if (key == ' ') {
-    mario.saltando = true;
+    mario.salitaSalto = true;
+    mario.yBeforeSalto = mario.y;
   }
 }
 

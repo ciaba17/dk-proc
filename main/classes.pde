@@ -7,10 +7,14 @@ class Mario {
   PImage[] camminata = new PImage[4];
   PImage[] scalata = new PImage[2];
   boolean idleDestra = true;
+  
   boolean salendo = false;
   float yInizioScala;
   float xScala;
-  boolean saltando = false;
+  
+  float yBeforeSalto;
+  boolean salitaSalto = false;
+  boolean discesaSalto = false;
 
 
   void move() {
@@ -38,11 +42,30 @@ class Mario {
         }
       }
       // Se non preme su o giu mentre è su una scala e in modalità salendo, rimane fermo
-    } else { // Se non è su una scala
-      salendo = false; // Assicura che non sia in modalità salita
-      offset(); // Applica l'offset della piattaforma
+    } 
+    else if (salitaSalto) {
+      if (yBeforeSalto - y < squareH) {
+        y -= squareH * 0.1;
+      }
+      else {
+       discesaSalto = true;
+       salitaSalto = false;
+      }
+    }
+    else if (discesaSalto) {
+      if (y < yBeforeSalto)
+        y += squareH * 0.1;
+      else
+        discesaSalto = false;
     }
 
+    else {
+      salendo = false; // Assicura che non sia in modalità salita
+    }
+
+    if (!salendo)
+      offset(); // Applica l'offset della piattaforma
+      
     gridPosX = round(x / (width / 28));
     gridPosY = round(y / (height / 32));
   }
@@ -75,6 +98,7 @@ class Mario {
       }
     }
     popMatrix();
+
   }
 
 
