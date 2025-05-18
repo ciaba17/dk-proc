@@ -1,22 +1,12 @@
-void resize() {
-  if (lastWidth != width || lastHeight != height) {
-    squareW = width / 28.0;
-    squareH = height / 32.0;
-  }
-  
-  lastWidth = width;
-  lastHeight = height;
-}
-
-
 void loadImmagini() {
   scala = loadImage("../data/scala.png");
   trave = loadImage("../data/trave.png");
   barile = loadImage("../data/scala.png");
   
-  donkeykongStill = loadImage("../data/donkeykongStill.png");
-  donkeykongLeft = loadImage("../data/donkeykongLeft.png");
-  donkeykongRight = loadImage("../data/donkeykongRight.png");
+  // Animazioni dKong
+  for (int i = 0; i < dKong.sprites.length; i++) {
+     dKong.sprites[i] = loadImage("../data/donkeyKongSprites/" + i +  ".png");
+  }
   
   // Camminata Mario
   for (int i = 0; i < mario.camminata.length; i++) {
@@ -50,4 +40,6 @@ void setupScale() {
   scale.add(new Scala(squareH * 14.55, squareH * 18.56, squareW * 9.5));
   // Quinta trave
   scale.add(new Scala(squareH * 10.9, squareH * 14.2, squareW * 23.5));
+  // Sesta trave
+  scale.add(new Scala(squareH * 7.6, squareH * 11.2, squareW * 16.5));
 }

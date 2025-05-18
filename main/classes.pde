@@ -132,7 +132,7 @@ class Scala {
 class Barile {
   float x = squareW * 9, y = squareH * 11;
   int gridPosX = 9, gridPosY = 10;
-  final float SPEED = 2.0;
+  final float SPEED = width/300;
   int dir = 1; // Direzione di rotolamento: 1 per destra, -1 per sinistra, 0 per fermo/caduta
   float distanzaCaduta = 0; // Distanza rimanente da cadere quando cade da un bordo
   boolean destra = true;
@@ -269,3 +269,26 @@ class Barile {
     image(barile, x - squareW / 2, y - squareH / 2, squareW, squareH);
   }
 }
+
+
+class DonkeyKong {
+  float x = squareW * 5.3, y = squareH * 9;
+  PImage[] sprites = new PImage [4];
+  float frameIndex = 0;
+
+  
+  
+  void draw() {
+    int i = 0;
+    
+    if (frameIndex > 90) frameIndex = 0;
+    else if (frameIndex > 70) i = 3;
+    else if (frameIndex > 50) i = 2;
+    else if (frameIndex > 30) i = 1;
+    
+    image(sprites[i], x, y, squareW * 6, squareH * 4); 
+    
+    println(i);
+    frameIndex += 1;
+  }
+} DonkeyKong dKong;

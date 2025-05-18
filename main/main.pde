@@ -4,8 +4,13 @@ void setup() {
   noSmooth();
   frameRate(30);
   imageMode(CENTER);
-  resize();
-  mario = new Mario(); // Crea l'oggetto mario
+  
+  squareW = width / 28.0;
+  squareH = height / 32.0;
+  
+  mario = new Mario();
+  dKong = new DonkeyKong();
+  
   loadImmagini();
   setupScale();
 }
@@ -19,22 +24,19 @@ void draw() {
   drawMap();
   drawGrid();
   mario.draw();
+  dKong.draw();
+  
   // Disegno barili
   for (Barile barile : barili) {
     barile.draw();
-    barile.rotola();
   }
   
   
-  primoFrame = false;
 
 }
 
 
 void update() {
-  if (width != lastWidth || height != lastHeight) {
-    resize(); 
-  }
    
   mario.move();
   
@@ -45,5 +47,10 @@ void update() {
     tempoSpawn = 0;
   }
   
-  tempoSpawn += 2;
+  // Update dei barili
+  for (Barile barile : barili) {
+    barile.rotola();
+  }
+  
+  tempoSpawn += 1;
 }
