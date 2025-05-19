@@ -15,6 +15,8 @@ class Mario {
   float yBeforeSalto;
   boolean salitaSalto = false;
   boolean discesaSalto = false;
+  float altezzaSalto = squareH * 1.45;
+  float contDiscesa = altezzaSalto;
 
 
   void move() {
@@ -24,7 +26,26 @@ class Mario {
     }
 
     // Salita scale
-    if (suScala()) {
+    if (salitaSalto) {
+      if (yBeforeSalto - y < altezzaSalto) {
+        y -= squareH * 0.1;
+      }
+      else {
+        discesaSalto = true;
+        salitaSalto = false;
+      }
+    }
+    else if (discesaSalto) {
+      if (contDiscesa > 0) {
+        y += squareH * 0.1;
+        contDiscesa -= squareH * 0.1;
+      }
+      else {
+        discesaSalto = false;
+        contDiscesa = altezzaSalto;
+      }
+    }
+    else if (suScala()) {
       if (!salendo) { // Appena arriva su una scala
         yInizioScala = y; // Salva la y di partenza sulla piattaforma
       }
@@ -43,21 +64,6 @@ class Mario {
       }
       // Se non preme su o giu mentre è su una scala e in modalità salendo, rimane fermo
     } 
-    else if (salitaSalto) {
-      if (yBeforeSalto - y < squareH) {
-        y -= squareH * 0.1;
-      }
-      else {
-       discesaSalto = true;
-       salitaSalto = false;
-      }
-    }
-    else if (discesaSalto) {
-      if (y < yBeforeSalto)
-        y += squareH * 0.1;
-      else
-        discesaSalto = false;
-    }
 
     else {
       salendo = false; // Assicura che non sia in modalità salita
@@ -312,7 +318,6 @@ class DonkeyKong {
     
     image(sprites[i], x, y, squareW * 6, squareH * 4); 
     
-    println(i);
     frameIndex += 1;
   }
 } DonkeyKong dKong;

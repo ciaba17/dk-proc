@@ -43,3 +43,8 @@ void setupScale() {
   // Sesta trave
   scale.add(new Scala(squareH * 7.6, squareH * 11.2, squareW * 16.5));
 }
+
+void vittoria() {
+  println("Hai vinto!"); 
+  
+}

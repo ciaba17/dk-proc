@@ -53,4 +53,7 @@ void update() {
   }
   
   tempoSpawn += 1;
+  
+  if (mario.y < squareH * 8)
+    vittoria();
 }
