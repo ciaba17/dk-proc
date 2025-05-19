@@ -22,6 +22,12 @@ void drawMap() {
   drawTravi(2, 27, 22, 0, false, 1);
   drawTravi(0, 26, 26, 0, true, 1);
   drawTravi(0, 28, 31, 12, true, -1);
+  
+  // Disegna i barili accanto a dKong
+  image(barileVerticale, squareW * 0.7, squareH  * 8, squareW * 2, squareH * 1.8);
+  image(barileVerticale, squareW * 2, squareH  * 8, squareW * 2, squareH * 1.8);
+  image(barileVerticale, squareW * 2, squareH  * 10, squareW * 2, squareH * 1.8);
+  image(barileVerticale, squareW * 0.7, squareH  * 10, squareW * 2, squareH * 1.8);
 }
 
 

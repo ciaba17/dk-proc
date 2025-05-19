@@ -1,6 +1,8 @@
-PImage scala, trave, barile, donkeykongStill, donkeykongLeft, donkeykongRight;
+PImage scala, trave, barileVerticale, menu;
 float lastWidth = 1, lastHeight = 1;
 float squareW, squareH;
+
+boolean onMenu = true;
 
 int rand;
 

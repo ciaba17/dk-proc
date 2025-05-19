@@ -296,7 +296,7 @@ class Barile {
   }
 
   void draw() {
-    image(barile, x - squareW / 2, y - squareH / 2, squareW, squareH);
+    image(barileVerticale, x - squareW / 2, y - squareH / 2, squareW, squareH);
   }
 }
 

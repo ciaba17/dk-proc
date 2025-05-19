@@ -17,12 +17,14 @@ void setup() {
 
 
 void draw() {
+  if (onMenu)
+    drawMenu();
   update();
   background(0);
   
   
   drawMap();
-  drawGrid();
+  //drawGrid();
   mario.draw();
   dKong.draw();
   
@@ -32,7 +34,6 @@ void draw() {
   }
   
   
-
 }
 
 
