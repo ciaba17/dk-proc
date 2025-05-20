@@ -171,7 +171,7 @@ class Scala {
 class Barile {
   float x = squareW * 9, y = squareH * 11;
   int gridPosX = 9, gridPosY = 10;
-  final float SPEED = width/300;
+  float speed = width/150;
   int dir = 1; // Direzione di rotolamento: 1 per destra, -1 per sinistra, 0 per fermo/caduta
   float distanzaCaduta = 0; // Distanza rimanente da cadere quando cade da un bordo
   boolean destra = true;
@@ -186,14 +186,21 @@ class Barile {
   void draw() {
     int i = 0;
     
-    if (frameIndex > 90) frameIndex = 0;
-    else if (frameIndex > 70) i = 3;
-    else if (frameIndex > 50) i = 2;
-    else if (frameIndex > 30) i = 1;
+    if (scendendo) {
+      if (frameIndex > 90) frameIndex = 0;
+      else if (frameIndex > 70) i = 1;
+      
+      image(discesaBarili[i], x - squareW / 2, y - squareH / 2, squareW * 1.7, squareH * 1.7);
+    }
+    else {
+      if (frameIndex > 90) frameIndex = 0;
+      else if (frameIndex > 70) i = 3;
+      else if (frameIndex > 50) i = 2;
+      else if (frameIndex > 30) i = 1;
     
-    image(bariliSprites[i], x - squareW / 2, y - squareH / 2, squareW * 1.7, squareH * 1.7);
-    
-    frameIndex += 10;
+      image(rotolamentoBarili[i], x - squareW / 2, y - squareH / 2, squareW * 1.7, squareH * 1.7);
+    }
+      frameIndex += 10;
     
   
   }
@@ -227,7 +234,7 @@ class Barile {
       }
     } else {
       // Non sta scendendo scale e non sta cadendo da un bordo -> rotola orizzontalmente
-      x += SPEED * dir;
+      x += speed * dir;
       offset(); // Applica l'inclinazione della piattaforma (se presente)
       scendiScale(); // Controlla se incontra una scala e deve iniziare a scendere
     }
@@ -279,7 +286,7 @@ class Barile {
         }
 
         // Se ha deciso di scendere (es. random > 39) e la decisione è stata presa
-        if (decisionePresaPerScala && randDecisioneScala >= 40) {
+        if (decisionePresaPerScala && randDecisioneScala >= 65) {
           scendendo = true;
           scalaCorrente = s;
           x = s.x + squareW * 0.5; // Allinea il barile al centro della scala
@@ -303,18 +310,18 @@ class Barile {
     if (dir != 0 && !scendendo && distanzaCaduta <= 0) {
       if (gridPosY >= 28) {
         if (gridPosX >= 14)
-          y -= height * 0.00019 * dir;
+          y -= speed/15 * dir;
       } else if (gridPosY >= 24) {
-        y += height * 0.00019 * dir;
+        y += speed/15 * dir;
       } else if (gridPosY >= 20) {
-        y -= height * 0.00019 * dir;
+        y -= speed/15 * dir;
       } else if (gridPosY >= 16) {
-        y += height * 0.00019 * dir;
+        y += speed/15 * dir;
       } else if (gridPosY >= 12) {
-        y -= height * 0.00019 * dir;
+        y -= speed/15 * dir;
       } else if (gridPosY >= 9) {
         if (gridPosX >= 18) {
-          y += height * 0.00019 * dir;
+          y += speed/15 * dir;
         }
       }
     }

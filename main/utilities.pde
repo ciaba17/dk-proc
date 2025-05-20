@@ -22,8 +22,13 @@ void loadImmagini() {
   mario.salto = loadImage("../data/marioSprites/walk3.png");
   
   // Rotolamento barili
-  for (int i = 0; i < bariliSprites.length; i++) {
-     bariliSprites[i] = loadImage("../data/bariliSprites/" + i +  ".png");
+  for (int i = 0; i < rotolamentoBarili.length; i++) {
+     rotolamentoBarili[i] = loadImage("../data/bariliSprites/" + i +  ".png");
+  }
+  
+  // Discesa barili
+  for (int i = 0; i < discesaBarili.length; i++) {
+     discesaBarili[i] = loadImage("../data/bariliSprites/discesa" + i +  ".png");
   }
   
   // Idle Donkey Kong
