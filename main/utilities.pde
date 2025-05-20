@@ -18,6 +18,14 @@ void loadImmagini() {
      mario.scalata[i] = loadImage("../data/marioSprites/climb" + i +  ".png");
   }
   
+  // Salto mario
+  mario.salto = loadImage("../data/marioSprites/walk3.png");
+  
+  // Rotolamento barili
+  for (int i = 0; i < bariliSprites.length; i++) {
+     bariliSprites[i] = loadImage("../data/bariliSprites/" + i +  ".png");
+  }
+  
   // Idle Donkey Kong
   /*for (int i = 0; i < donkeykong.idle.lenght; i++) {
     donkeykong.idle[i] = loadImage("../data/donkeyKongSprites/Idle" + i + ".png");
@@ -42,6 +50,8 @@ void setupScale() {
   // Quinta trave
   scale.add(new Scala(squareH * 10.9, squareH * 14.2, squareW * 23.5));
   // Sesta trave
+  scale.add(new Scala(squareH * 0.0, squareH * 11.2, squareW * 8.5));
+  scale.add(new Scala(squareH * 0.0, squareH * 11.2, squareW * 10.5));
   scale.add(new Scala(squareH * 7.6, squareH * 11.2, squareW * 16.5));
 }
 

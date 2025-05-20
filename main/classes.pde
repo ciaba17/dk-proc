@@ -6,6 +6,7 @@ class Mario {
   float frameIndex = 0;
   PImage[] camminata = new PImage[4];
   PImage[] scalata = new PImage[2];
+  PImage salto;
   boolean idleDestra = true;
   
   boolean salendo = false;
@@ -88,7 +89,14 @@ class Mario {
       // Disegna sempre l'immagine della scalata se 'salendo' è true
       // Se non si muove, mostra l'ultimo frame dell'animazione
       image(scalata[int(frameIndex)], 0, y, squareW * 2, squareH * 2);
-    } else { // Non sta salendo scale
+    } 
+    else if (salitaSalto || discesaSalto) {
+        if (dir == -1 || (!idleDestra && dir == 0)) { // Se va a sinistra o era a sinistra ed è fermo
+          scale(-1, 1); // Specchia l'immagine
+        }
+        image (salto, 0, y, squareW * 2, squareH * 2);
+    }
+    else { // Non sta salendo scale
       if (dir == -1 || (!idleDestra && dir == 0)) { // Se va a sinistra o era a sinistra ed è fermo
         scale(-1, 1); // Specchia l'immagine
       }
@@ -99,7 +107,8 @@ class Mario {
           frameIndex = 0;
         image(camminata[int(frameIndex)], 0, y, squareW * 2, squareH * 2);
         idleDestra = (dir == 1); // Aggiorna l'ultimo stato di direzione per l'idle
-      } else { // Se è fermo (idle)
+      } 
+      else { // Se è fermo (idle)
         image(camminata[0], 0, y, squareW * 2, squareH * 2); // Mostra il primo frame come idle
       }
     }
@@ -166,12 +175,28 @@ class Barile {
   int dir = 1; // Direzione di rotolamento: 1 per destra, -1 per sinistra, 0 per fermo/caduta
   float distanzaCaduta = 0; // Distanza rimanente da cadere quando cade da un bordo
   boolean destra = true;
+  float frameIndex = 0;
 
   boolean scendendo = false; // True se il barile sta attualmente scendendo una scala
   Scala scalaCorrente = null; // Riferimento alla scala che sta scendendo
 
   int randDecisioneScala = -1; // Risultato della decisione casuale (0 non scende, 1 scende)
   boolean decisionePresaPerScala = false; // Flag per assicurare che la decisione di scendere venga presa una sola volta per "incontro" con una zona scala
+
+  void draw() {
+    int i = 0;
+    
+    if (frameIndex > 90) frameIndex = 0;
+    else if (frameIndex > 70) i = 3;
+    else if (frameIndex > 50) i = 2;
+    else if (frameIndex > 30) i = 1;
+    
+    image(bariliSprites[i], x - squareW / 2, y - squareH / 2, squareW * 1.7, squareH * 1.7);
+    
+    frameIndex += 10;
+    
+  
+  }
 
   void rotola() {
     if (scendendo) {
@@ -293,10 +318,6 @@ class Barile {
         }
       }
     }
-  }
-
-  void draw() {
-    image(barileVerticale, x - squareW / 2, y - squareH / 2, squareW, squareH);
   }
 }
 

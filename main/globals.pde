@@ -1,4 +1,5 @@
 PImage scala, trave, barileVerticale, menu;
+PImage bariliSprites[] = new PImage[4];
 float lastWidth = 1, lastHeight = 1;
 float squareW, squareH;
 
