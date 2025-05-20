@@ -1,5 +1,7 @@
 class Mario {
-  float x = squareW * 5, y = squareH * 30;
+  float x = squareW * 5, y = squareH * 30.15;
+  float larghezza = squareW * 2, altezza = squareH * 1.85;
+  float hitboxL, hitboxR, hitboxU, hitboxD;
   int gridPosX, gridPosY;
   int dir; // 0 = fermo, 1 = destra, -1 = sinistra
   final float SPEED = 5;
@@ -16,7 +18,7 @@ class Mario {
   float yBeforeSalto;
   boolean salitaSalto = false;
   boolean discesaSalto = false;
-  float altezzaSalto = squareH * 1.45;
+  float altezzaSalto = squareH * 1.65;
   float contDiscesa = altezzaSalto;
 
 
@@ -26,10 +28,10 @@ class Mario {
       x += SPEED * width / 800 * dir; // Muove sull'asse x aggiungendo velocità e normalizzandola per la larghezza
     }
 
-    // Salita scale
+    // Salto
     if (salitaSalto) {
       if (yBeforeSalto - y < altezzaSalto) {
-        y -= squareH * 0.1;
+        y -= squareH * 0.135;
       }
       else {
         discesaSalto = true;
@@ -38,14 +40,15 @@ class Mario {
     }
     else if (discesaSalto) {
       if (contDiscesa > 0) {
-        y += squareH * 0.1;
-        contDiscesa -= squareH * 0.1;
+        y += squareH * 0.135;
+        contDiscesa -= squareH * 0.135;
       }
       else {
         discesaSalto = false;
         contDiscesa = altezzaSalto;
       }
     }
+    // Salita scale
     else if (suScala()) {
       if (!salendo) { // Appena arriva su una scala
         yInizioScala = y; // Salva la y di partenza sulla piattaforma
@@ -75,6 +78,12 @@ class Mario {
       
     gridPosX = round(x / (width / 28));
     gridPosY = round(y / (height / 32));
+    
+    hitboxL = x - larghezza / 2;
+    hitboxR = x + larghezza / 2;
+    hitboxU = y - altezza / 2;
+    hitboxD = y + altezza / 2;
+    collisioni();
   }
 
   void draw() {
@@ -88,13 +97,13 @@ class Mario {
       }
       // Disegna sempre l'immagine della scalata se 'salendo' è true
       // Se non si muove, mostra l'ultimo frame dell'animazione
-      image(scalata[int(frameIndex)], 0, y, squareW * 2, squareH * 2);
+      image(scalata[int(frameIndex)], 0, y, larghezza, altezza);
     } 
     else if (salitaSalto || discesaSalto) {
         if (dir == -1 || (!idleDestra && dir == 0)) { // Se va a sinistra o era a sinistra ed è fermo
           scale(-1, 1); // Specchia l'immagine
         }
-        image (salto, 0, y, squareW * 2, squareH * 2);
+        image (salto, 0, y, larghezza, altezza);
     }
     else { // Non sta salendo scale
       if (dir == -1 || (!idleDestra && dir == 0)) { // Se va a sinistra o era a sinistra ed è fermo
@@ -105,11 +114,11 @@ class Mario {
         frameIndex += 0.5; // Velocità animazione camminata
         if (frameIndex >= camminata.length)
           frameIndex = 0;
-        image(camminata[int(frameIndex)], 0, y, squareW * 2, squareH * 2);
+        image(camminata[int(frameIndex)], 0, y, larghezza, altezza);
         idleDestra = (dir == 1); // Aggiorna l'ultimo stato di direzione per l'idle
       } 
       else { // Se è fermo (idle)
-        image(camminata[0], 0, y, squareW * 2, squareH * 2); // Mostra il primo frame come idle
+        image(camminata[0], 0, y, larghezza, altezza); // Mostra il primo frame come idle
       }
     }
     popMatrix();
@@ -138,19 +147,31 @@ class Mario {
   void offset() {
     if (gridPosY >= 28) {
       if (gridPosX >= 14)
-        y -= height * 0.00035 * dir;
+        y -= altezza/190 * dir;
     } else if (gridPosY >= 23) {
-      y += height * 0.00035 * dir;
+      y += altezza/190 * dir;
     } else if (gridPosY >= 20) {
-      y -= height * 0.00035 * dir;
+      y -= altezza/190 * dir;
     } else if (gridPosY >= 16) {
-      y += height * 0.00035 * dir;
+      y += altezza/190 * dir;
     } else if (gridPosY >= 12) {
-      y -= height * 0.00035 * dir;
+      y -= altezza/190 * dir;
     } else if (gridPosY >= 9) {
       if (gridPosX >= 18) {
-        y += height * 0.00035 * dir;
+        y += altezza/190 * dir;
       }
+    }
+  }
+  
+  void collisioni() {
+    for (Barile barile : barili) {
+      boolean collisioneBarile = 
+        mario.hitboxR > barile.hitboxL &&
+        mario.hitboxL < barile.hitboxR &&
+        mario.hitboxD > barile.hitboxU &&
+        mario.hitboxU < barile.hitboxD;
+      if (collisioneBarile)
+        println("coll");
     }
   }
 } Mario mario;
@@ -170,6 +191,8 @@ class Scala {
 
 class Barile {
   float x = squareW * 9, y = squareH * 11;
+  float larghezza = squareW * 1.7, altezza = squareH * 1.7;
+  float hitboxL, hitboxR, hitboxU, hitboxD;
   int gridPosX = 9, gridPosY = 10;
   float speed = width/150;
   int dir = 1; // Direzione di rotolamento: 1 per destra, -1 per sinistra, 0 per fermo/caduta
@@ -190,7 +213,7 @@ class Barile {
       if (frameIndex > 90) frameIndex = 0;
       else if (frameIndex > 70) i = 1;
       
-      image(discesaBarili[i], x - squareW / 2, y - squareH / 2, squareW * 1.7, squareH * 1.7);
+      image(discesaBarili[i], x - squareW / 2, y - squareH / 2, larghezza, altezza);
     }
     else {
       if (frameIndex > 90) frameIndex = 0;
@@ -198,7 +221,7 @@ class Barile {
       else if (frameIndex > 50) i = 2;
       else if (frameIndex > 30) i = 1;
     
-      image(rotolamentoBarili[i], x - squareW / 2, y - squareH / 2, squareW * 1.7, squareH * 1.7);
+      image(rotolamentoBarili[i], x - squareW / 2, y - squareH / 2, larghezza, altezza);
     }
       frameIndex += 10;
     
@@ -260,6 +283,11 @@ class Barile {
     // Aggiorna sempre le posizioni grid alla fine del movimento
     gridPosX = round(x / (width / 28.0));
     gridPosY = round(y / (height / 32.0));
+    
+    hitboxL = x - larghezza / 2;
+    hitboxR = x + larghezza / 2;
+    hitboxU = y - altezza / 2;
+    hitboxD = y + altezza / 2;
   }
 
   void scendiScale() {

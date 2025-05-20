@@ -17,23 +17,23 @@ void setup() {
 
 
 void draw() {
-  if (onMenu)
+  if (!onMenu)
     drawMenu();
-  update();
-  background(0);
+  else {
+    update();
+    background(0);
   
   
-  drawMap();
-  //drawGrid();
-  mario.draw();
-  dKong.draw();
+    drawMap();
+    drawGrid();
+    mario.draw();
+    dKong.draw();
   
-  // Disegno barili
-  for (Barile barile : barili) {
-    barile.draw();
+    // Disegno barili
+    for (Barile barile : barili) {
+      barile.draw();
+    }
   }
-  
-  
 }
 
 

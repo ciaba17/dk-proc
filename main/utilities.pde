@@ -3,6 +3,7 @@ void loadImmagini() {
   trave = loadImage("../data/trave.png");
   barileVerticale = loadImage("../data/bariliSprites/barileVerticale.png");
   menu = loadImage("../data/menu.png");
+  menuStart = loadImage("../data/menuStart.png");
   
   // Animazioni dKong
   for (int i = 0; i < dKong.sprites.length; i++) {
@@ -62,11 +63,5 @@ void setupScale() {
 
 void vittoria() {
   println("Hai vinto!"); 
-  
-}
-
-
-void drawMenu() {
-  image(menu, width/2, height/2, width, height); 
   
 }

@@ -73,6 +73,20 @@ void drawScale(float yUp, float yDown, float x) {
 }
 
 
+void drawMenu() {
+  image(menu, width/2, height/2, width, height);  
+  
+  if (menuStartIndex > 30) {
+    image(menuStart, width/2, height/1.7, width/2, height/24);
+  }
+  if (menuStartIndex > 60) {
+    menuStartIndex = 0;
+  }
+  
+  menuStartIndex += 1;
+}
+
+
 void drawGrid() {
   for (int i = 0; i < 32; i++) {
     for (int j = 0; j < 28; j++) {

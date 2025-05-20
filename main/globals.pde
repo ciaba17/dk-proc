@@ -1,6 +1,8 @@
-PImage scala, trave, barileVerticale, menu;
+PImage scala, trave, barileVerticale, menu, menuStart;
 PImage rotolamentoBarili[] = new PImage[4];
 PImage discesaBarili[] = new PImage[2];
+
+int menuStartIndex = 0;
 
 float lastWidth = 1, lastHeight = 1;
 float squareW, squareH;
