@@ -1,15 +1,22 @@
 class Mario {
   float x = squareW * 5, y = squareH * 30.15;
   float larghezza = squareW * 2, altezza = squareH * 1.85;
+  
   float hitboxL, hitboxR, hitboxU, hitboxD;
+  float martHitboxL, martHitboxR, martHitboxU, martHitboxD;
+  float hammerW = larghezza * 0.5; 
+  float hammerH = altezza * 0.6;
+  float hammerOffsetY = altezza * 0.2;
+  
   int gridPosX, gridPosY;
   int dir; // 0 = fermo, 1 = destra, -1 = sinistra
-  final float SPEED = 5;
+  final float SPEED = width / 120;
   float frameIndex = 0;
   float frameIndexMorte = 0;
   PImage[] camminata = new PImage[4];
   PImage[] scalata = new PImage[2];
   PImage[] morte = new PImage[5];
+  PImage[] martellate = new PImage[4];
   PImage salto;
   boolean idleDestra = true;
   
@@ -24,6 +31,7 @@ class Mario {
   float contDiscesa = altezzaSalto;
   
   boolean morto = false;
+  boolean conMartello = false;
 
   void draw() {
     pushMatrix();
@@ -39,6 +47,24 @@ class Mario {
         }
         image(morte[int(frameIndex)], 0, y, larghezza, altezza);
       }
+    }
+    else if (conMartello) {
+      float offsetX = (dir == -1 || (!idleDestra && dir == 0)) ? +larghezza : 0;
+      float offsetY = y - squareH * 0.7;
+      if (dir == -1 || (!idleDestra && dir == 0)) {
+        scale(-1, 1);
+      }
+
+      if (dir != 0) {
+        frameIndex += 0.4;
+        if (frameIndex >= martellate.length)
+          frameIndex = 0;
+        image(martellate[int(frameIndex)], offsetX, offsetY - squareH * 0.3, larghezza * 2, altezza * 2);
+        idleDestra = (dir == 1);
+      }
+      else {
+        image(martellate[0], offsetX, offsetY - squareH * 0.3, larghezza * 2, altezza * 2);
+      }  
     }
     else if (salendo) {
       if (upPremuto || downPremuto) { // Animazione solo se si muove sulla scala
@@ -82,8 +108,10 @@ class Mario {
       x += SPEED * width / 800 * dir; // Muove sull'asse x aggiungendo velocità e normalizzandola per la larghezza
     }
 
-    // Salto
-    if (salitaSalto) {
+    if (conMartello && (!salitaSalto && !discesaSalto)) {
+      
+    }
+    else if (salitaSalto) {
       if (yBeforeSalto - y < altezzaSalto) {
         y -= squareH * 0.135;
       }
@@ -138,6 +166,17 @@ class Mario {
     hitboxU = y - altezza / 2;
     hitboxD = y + altezza / 2;
     
+    if (dir == 1) {
+      martHitboxL = x + larghezza * 0.5;
+      martHitboxR = martHitboxL + hammerW;
+    }
+    else {
+      martHitboxR = x + larghezza * 0.5;
+      martHitboxL = martHitboxR - hammerW;
+    }
+    martHitboxU = y + hammerOffsetY;
+    martHitboxD = martHitboxU + hammerH;
+    
     collisioni();
   }
 
@@ -181,14 +220,39 @@ class Mario {
   void collisioni() {
     for (Barile barile : barili) {
       boolean collisioneBarile = 
-        mario.hitboxR > barile.hitboxL &&
-        mario.hitboxL < barile.hitboxR &&
-        mario.hitboxD > barile.hitboxU &&
-        mario.hitboxU < barile.hitboxD;
+        hitboxR > barile.hitboxL &&
+        hitboxL < barile.hitboxR &&
+        hitboxD > barile.hitboxU &&
+        hitboxU < barile.hitboxD;
         
       if (collisioneBarile)
         morto = true;
+      
+      boolean collisioneMartelloBarile = 
+        martHitboxR > barile.hitboxL &&
+        martHitboxL < barile.hitboxR &&
+        martHitboxD > barile.hitboxU &&
+        martHitboxU < barile.hitboxD;
+        
+      if (collisioneMartelloBarile)
+        barile.daRimuovere = true;
     }
+    barili.removeIf(barile -> barile.daRimuovere);
+
+    
+    for (Martello martello : martelli) {
+      boolean collisione = 
+        hitboxR > martello.hitboxL &&
+        hitboxL < martello.hitboxR &&
+        hitboxD > martello.hitboxU &&
+        hitboxU < martello.hitboxD;
+        
+      if (collisione) {
+        conMartello = true;
+        martello.daRimuovere = true;
+      }
+    }
+    martelli.removeIf(martello -> martello.daRimuovere);
   }
 } Mario mario;
 
@@ -215,6 +279,7 @@ class Barile {
   float distanzaCaduta = 0; // Distanza rimanente da cadere quando cade da un bordo
   boolean destra = true;
   float frameIndex = 0;
+  boolean daRimuovere = false;
 
   boolean scendendo = false; // True se il barile sta attualmente scendendo una scala
   Scala scalaCorrente = null; // Riferimento alla scala che sta scendendo
@@ -401,3 +466,26 @@ class DonkeyKong {
       frameIndex += 1;
   }
 } DonkeyKong dKong;
+
+
+class Martello {
+  float x, y;
+  float larghezza = squareW, altezza = squareH;
+  float hitboxL, hitboxR, hitboxU, hitboxD;
+  boolean daRimuovere = false;
+
+  
+  Martello(float x_, float y_) {
+    x = squareW * x_;
+    y = squareH * y_;
+    
+    hitboxL = x - larghezza / 2 + squareW * 0.7;
+    hitboxR = x + larghezza / 2 - squareW * 0.7;
+    hitboxU = y - altezza / 2 + squareH * 0.7;
+    hitboxD = y + altezza / 2 - squareH * 0.7;
+  }
+  
+  void draw() {
+    image(martello, x, y, squareW * 1, squareH * 1); 
+  }
+}

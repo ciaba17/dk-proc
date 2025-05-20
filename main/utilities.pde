@@ -2,7 +2,9 @@ void loadImmagini() {
   scala = loadImage("../data/scala.png");
   trave = loadImage("../data/trave.png");
   barileVerticale = loadImage("../data/bariliSprites/barileVerticale.png");
+  martello = loadImage("../data/martello.png");
   peach = loadImage("../data/peach.png");
+  oil = loadImage("../data/oil.png");
   menu = loadImage("../data/menu.png");
   menuStart = loadImage("../data/menuStart.png");
   
@@ -22,6 +24,10 @@ void loadImmagini() {
   // Morte Mario
   for (int i = 0; i < mario.morte.length; i++) {
      mario.morte[i] = loadImage("../data/marioSprites/death" + i +  ".png");
+  }
+  // Mario con martello
+  for (int i = 0; i < mario.martellate.length; i++) {
+     mario.martellate[i] = loadImage("../data/marioSprites/hammer" + i +  ".png");
   }
   // Salto mario
   mario.salto = loadImage("../data/marioSprites/walk3.png");
@@ -46,7 +52,8 @@ void loadImmagini() {
 void setupScale() {
   scale.clear();
   // Prima trave
-  scale.add(new Scala(squareH * 26.1, squareH * 31.1, squareW * 10.5));
+  scale.add(new Scala(squareH * 26.0, squareH * 28.0, squareW * 10.5));
+  scale.add(new Scala(squareH * 29.1, squareH * 31.1, squareW * 10.5));
   scale.add(new Scala(squareH * 26.8, squareH * 30.4, squareW * 23.5));
   // Seconda trave
   scale.add(new Scala(squareH * 22.9, squareH * 26.2, squareW * 4.5));
@@ -68,4 +75,37 @@ void setupScale() {
 void vittoria() {
   println("Hai vinto!"); 
   
+}
+
+
+
+void gestisciAudio() {
+  if (onMenu) {
+    // Se siamo nel menu
+    if (levelMusic.isPlaying()) {
+      levelMusic.stop(); // Ferma la musica del livello
+    }
+    if (deathMusic.isPlaying()) {
+      deathMusic.stop(); // Assicura che anche la musica di morte sia ferma
+    }
+  } else { // Se non siamo nel menu (siamo in gioco)
+    if (!mario.morto) {
+      // Se Mario è vivo
+      if (deathMusic.isPlaying()) {
+        deathMusic.stop(); // Ferma la musica di morte se stava suonando
+      }
+      if (!levelMusic.isPlaying()) {
+        levelMusic.loop(); // Avvia la musica del livello in loop se non è già in esecuzione
+      }
+    } else {
+      // Se Mario è morto
+      if (levelMusic.isPlaying()) {
+        levelMusic.stop(); // Ferma la musica del livello
+      }
+      if (!deathMusic.isPlaying()) {
+        deathMusic.play(); // Avvia la musica di morte se non è già in esecuzione
+                           // Potresti usare deathMusic.loop() se deve essere un loop
+      }
+    }
+  }
 }

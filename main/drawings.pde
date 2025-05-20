@@ -31,6 +31,9 @@ void drawMap() {
   
   // Disegna peach
   image(peach, squareW * 12.2, squareH  * 6.3, squareW * 2, squareH * 4);
+  
+  // Disegna barile OIL
+  image(oil, squareW * 3, squareH  * 30, squareW * 2, squareH * 2);
 }
 
 

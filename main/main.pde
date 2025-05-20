@@ -1,8 +1,3 @@
-import processing.sound.*;
-
-SoundFile levelMusic;
-SoundFile deathMusic;
-
 void setup() {
   size(600, 800);
   surface.setResizable(true);
@@ -19,8 +14,11 @@ void setup() {
   loadImmagini();
   setupScale();
 
+  intro = new Movie(this, "intro.mp4");
   levelMusic = new SoundFile(this, "../data/sounds/levelMusic.mp3");
   deathMusic = new SoundFile(this, "../data/sounds/deathMusic.mp3");
+  
+  martelli.add(new Martello(20, 20));
 }
 
 
@@ -30,48 +28,26 @@ void draw() {
   drawGrid();
   mario.draw();
   dKong.draw();
-
-  if (onMenu)
-    drawMenu();
-  else if (!mario.morto) {
-    update();
-    // Disegno barili
-    for (Barile barile : barili) {
-      barile.draw();
-    }
-  }
   
   if (onMenu) {
     drawMenu();
-    // Se la musica del livello è in riproduzione mentre sei nel menu, fermala
-    if (levelMusic.isPlaying()) {
-      levelMusic.stop();
-    }
-  } else if (!mario.morto) {
-    // Avvia la musica del livello solo se non è già in riproduzione
-    // e se non siamo nel menu
-    if (!levelMusic.isPlaying()) {
-      levelMusic.loop();
-    }
+  }
+  else if (!mario.morto) {
     update();
+    
     // Disegno barili
     for (Barile barile : barili) {
       barile.draw();
     }
-  } else { // Mario è morto
-    // Qui potresti voler fermare levelMusic e avviare deathMusic
-    if (levelMusic.isPlaying()) {
-      levelMusic.stop();
+    // Disegno martelli
+    for (Martello martello : martelli) {
+      martello.draw();
     }
-    if (!deathMusic.isPlaying()) {
-      deathMusic.play(); // O loop() se è un loop di morte
-    }
-    // Mostra schermata di game over o riavvia
   }
 }
 
 void update() {
-
+  gestisciAudio();
   mario.update();
 
   // Spawn barili
@@ -91,4 +67,14 @@ void update() {
 
   if (mario.y < squareH * 8)
     vittoria();
+}
+
+
+void movieEvent(Movie m) {
+  m.read();
+}
+
+void movieFinished(Movie m) {
+  showIntro = false;
+  intro.stop();
 }

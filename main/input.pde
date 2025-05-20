@@ -13,9 +13,13 @@ void keyPressed() {
   if (key == 's') {
     downPremuto = true;
   }
-  if (key == ' ' && !mario.salendo && !mario.salitaSalto && !mario.discesaSalto) {
+  if (key == ' ' && !mario.salendo && !mario.salitaSalto && !mario.discesaSalto && !mario.conMartello) {
     mario.salitaSalto = true;
     mario.yBeforeSalto = mario.y;
+  }
+  if (keyCode == ENTER && onMenu) {
+    onMenu = false;
+    intro.play();
   }
 }
 
