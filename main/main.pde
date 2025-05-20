@@ -17,18 +17,16 @@ void setup() {
 
 
 void draw() {
-  if (!onMenu)
+  background(0);
+  drawMap();
+  drawGrid();
+  mario.draw();
+  dKong.draw();
+  
+  if (onMenu)
     drawMenu();
-  else {
+  else if (!mario.morto) {
     update();
-    background(0);
-  
-  
-    drawMap();
-    drawGrid();
-    mario.draw();
-    dKong.draw();
-  
     // Disegno barili
     for (Barile barile : barili) {
       barile.draw();
@@ -36,10 +34,9 @@ void draw() {
   }
 }
 
-
 void update() {
    
-  mario.move();
+  mario.update();
   
   // Spawn barili
   if (tempoSpawn > barrelTimeSpawn) {
@@ -50,8 +47,9 @@ void update() {
   
   // Update dei barili
   for (Barile barile : barili) {
-    barile.rotola();
+    barile.update();
   }
+  barili.removeIf(barile -> barile.daRimuovere());
   
   tempoSpawn += 1;
   

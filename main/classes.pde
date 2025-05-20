@@ -6,8 +6,10 @@ class Mario {
   int dir; // 0 = fermo, 1 = destra, -1 = sinistra
   final float SPEED = 5;
   float frameIndex = 0;
+  float frameIndexMorte = 0;
   PImage[] camminata = new PImage[4];
   PImage[] scalata = new PImage[2];
+  PImage[] morte = new PImage[5];
   PImage salto;
   boolean idleDestra = true;
   
@@ -20,9 +22,61 @@ class Mario {
   boolean discesaSalto = false;
   float altezzaSalto = squareH * 1.65;
   float contDiscesa = altezzaSalto;
+  
+  boolean morto = false;
 
+  void draw() {
+    pushMatrix();
+    translate(x, 0); // Trasla solo sull'asse x per lo scaling
+    if (morto) {
+      frameIndex += 0.23;
+      if (frameIndexMorte == 3)
+        image(morte[int(4)], 0, y, larghezza, altezza);
+      else {
+        if (frameIndex >= morte.length - 1) {
+          frameIndexMorte++;
+          frameIndex = 0;
+        }
+        image(morte[int(frameIndex)], 0, y, larghezza, altezza);
+      }
+    }
+    else if (salendo) {
+      if (upPremuto || downPremuto) { // Animazione solo se si muove sulla scala
+        frameIndex += 0.2;
+        if (frameIndex >= scalata.length)
+          frameIndex = 0;
+      }
+      // Disegna sempre l'immagine della scalata se 'salendo' è true
+      // Se non si muove, mostra l'ultimo frame dell'animazione
+      image(scalata[int(frameIndex)], 0, y, larghezza, altezza);
+    } 
+    else if (salitaSalto || discesaSalto) {
+        if (dir == -1 || (!idleDestra && dir == 0)) { // Se va a sinistra o era a sinistra ed è fermo
+          scale(-1, 1); // Specchia l'immagine
+        }
+        image (salto, 0, y, larghezza, altezza);
+    }
+    else { // Non sta salendo scale
+      if (dir == -1 || (!idleDestra && dir == 0)) { // Se va a sinistra o era a sinistra ed è fermo
+        scale(-1, 1); // Specchia l'immagine
+      }
 
-  void move() {
+      if (dir != 0) { // Se si sta muovendo orizzontalmente
+        frameIndex += 0.5; // Velocità animazione camminata
+        if (frameIndex >= camminata.length)
+          frameIndex = 0;
+        image(camminata[int(frameIndex)], 0, y, larghezza, altezza);
+        idleDestra = (dir == 1); // Aggiorna l'ultimo stato di direzione per l'idle
+      } 
+      else { // Se è fermo (idle)
+        image(camminata[0], 0, y, larghezza, altezza); // Mostra il primo frame come idle
+      }
+    }
+    popMatrix();
+
+  }
+  
+  void update() {
     // Camminata
     if (!salendo) {
       x += SPEED * width / 800 * dir; // Muove sull'asse x aggiungendo velocità e normalizzandola per la larghezza
@@ -83,48 +137,9 @@ class Mario {
     hitboxR = x + larghezza / 2;
     hitboxU = y - altezza / 2;
     hitboxD = y + altezza / 2;
+    
     collisioni();
   }
-
-  void draw() {
-    pushMatrix();
-    translate(x, 0); // Trasla solo sull'asse x per lo scaling
-    if (salendo) {
-      if (upPremuto || downPremuto) { // Animazione solo se si muove sulla scala
-        frameIndex += 0.2;
-        if (frameIndex >= scalata.length)
-          frameIndex = 0;
-      }
-      // Disegna sempre l'immagine della scalata se 'salendo' è true
-      // Se non si muove, mostra l'ultimo frame dell'animazione
-      image(scalata[int(frameIndex)], 0, y, larghezza, altezza);
-    } 
-    else if (salitaSalto || discesaSalto) {
-        if (dir == -1 || (!idleDestra && dir == 0)) { // Se va a sinistra o era a sinistra ed è fermo
-          scale(-1, 1); // Specchia l'immagine
-        }
-        image (salto, 0, y, larghezza, altezza);
-    }
-    else { // Non sta salendo scale
-      if (dir == -1 || (!idleDestra && dir == 0)) { // Se va a sinistra o era a sinistra ed è fermo
-        scale(-1, 1); // Specchia l'immagine
-      }
-
-      if (dir != 0) { // Se si sta muovendo orizzontalmente
-        frameIndex += 0.5; // Velocità animazione camminata
-        if (frameIndex >= camminata.length)
-          frameIndex = 0;
-        image(camminata[int(frameIndex)], 0, y, larghezza, altezza);
-        idleDestra = (dir == 1); // Aggiorna l'ultimo stato di direzione per l'idle
-      } 
-      else { // Se è fermo (idle)
-        image(camminata[0], 0, y, larghezza, altezza); // Mostra il primo frame come idle
-      }
-    }
-    popMatrix();
-
-  }
-
 
   boolean suScala() {
     for (Scala scala : scale) {
@@ -170,8 +185,9 @@ class Mario {
         mario.hitboxL < barile.hitboxR &&
         mario.hitboxD > barile.hitboxU &&
         mario.hitboxU < barile.hitboxD;
+        
       if (collisioneBarile)
-        println("coll");
+        morto = true;
     }
   }
 } Mario mario;
@@ -228,7 +244,7 @@ class Barile {
   
   }
 
-  void rotola() {
+  void update() {
     if (scendendo) {
       // Sta scendendo una scala
       y += squareH * 0.1; // Velocità di discesa sulla scala
@@ -284,10 +300,17 @@ class Barile {
     gridPosX = round(x / (width / 28.0));
     gridPosY = round(y / (height / 32.0));
     
-    hitboxL = x - larghezza / 2;
-    hitboxR = x + larghezza / 2;
-    hitboxU = y - altezza / 2;
-    hitboxD = y + altezza / 2;
+    hitboxL = x - larghezza / 2 + squareW * 0.7;
+    hitboxR = x + larghezza / 2 - squareW * 0.7;
+    hitboxU = y - altezza / 2 + squareH * 0.7;
+    hitboxD = y + altezza / 2 - squareH * 0.7;
+  }
+  
+  boolean daRimuovere() {
+    if (x - larghezza/2 > width && x + larghezza < 0 && y - altezza > height)
+      return true;
+      
+    return false;
   }
 
   void scendiScale() {
@@ -374,6 +397,7 @@ class DonkeyKong {
     
     image(sprites[i], x, y, squareW * 6, squareH * 4); 
     
-    frameIndex += 1;
+    if (!mario.morto)
+      frameIndex += 1;
   }
 } DonkeyKong dKong;

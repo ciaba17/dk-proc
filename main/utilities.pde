@@ -2,6 +2,7 @@ void loadImmagini() {
   scala = loadImage("../data/scala.png");
   trave = loadImage("../data/trave.png");
   barileVerticale = loadImage("../data/bariliSprites/barileVerticale.png");
+  peach = loadImage("../data/peach.png");
   menu = loadImage("../data/menu.png");
   menuStart = loadImage("../data/menuStart.png");
   
@@ -18,7 +19,10 @@ void loadImmagini() {
   for (int i = 0; i < mario.scalata.length; i++) {
      mario.scalata[i] = loadImage("../data/marioSprites/climb" + i +  ".png");
   }
-  
+  // Morte Mario
+  for (int i = 0; i < mario.morte.length; i++) {
+     mario.morte[i] = loadImage("../data/marioSprites/death" + i +  ".png");
+  }
   // Salto mario
   mario.salto = loadImage("../data/marioSprites/walk3.png");
   

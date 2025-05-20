@@ -1,5 +1,4 @@
 void keyPressed() {
-  
   if (key == 'a') {
     mario.dir = -1;
     mario.idleDestra = false;

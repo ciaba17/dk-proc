@@ -28,6 +28,9 @@ void drawMap() {
   image(barileVerticale, squareW * 2, squareH  * 8, squareW * 2, squareH * 1.8);
   image(barileVerticale, squareW * 2, squareH  * 10, squareW * 2, squareH * 1.8);
   image(barileVerticale, squareW * 0.7, squareH  * 10, squareW * 2, squareH * 1.8);
+  
+  // Disegna peach
+  image(peach, squareW * 12.2, squareH  * 6.3, squareW * 2, squareH * 4);
 }
 
 
