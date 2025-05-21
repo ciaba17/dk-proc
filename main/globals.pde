@@ -32,3 +32,4 @@ final int barrelTimeSpawn = 90;
 SoundFile levelMusic;
 SoundFile deathMusic;
 SoundFile jumping;
+SoundFile win;

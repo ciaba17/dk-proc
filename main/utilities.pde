@@ -75,7 +75,7 @@ void setupScale() {
 }
 
 void vittoria() {
-  println("Hai vinto!"); 
+  win.play();
   
 }
 

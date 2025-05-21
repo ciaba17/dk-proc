@@ -17,6 +17,8 @@ void setup() {
   levelMusic = new SoundFile(this, "../data/sounds/levelMusic.mp3");
   deathMusic = new SoundFile(this, "../data/sounds/deathMusic.mp3");
   jumping = new SoundFile(this, "../data/sounds/jumping.mp3");
+  win = new SoundFile(this, "../data/sounds/win.mp3");
+
 
   
   martelli.add(new Martello(20, 24.5));
