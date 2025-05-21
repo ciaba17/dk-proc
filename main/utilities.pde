@@ -7,6 +7,8 @@ void loadImmagini() {
   oil = loadImage("../data/oil.png");
   menu = loadImage("../data/menu.png");
   menuStart = loadImage("../data/menuStart.png");
+  dkongAngry = loadImage("../data/donkeyKongSprites/4.png");
+  cuore = loadImage("../data/cuore.png");
   
   // Animazioni dKong
   for (int i = 0; i < dKong.sprites.length; i++) {

@@ -14,11 +14,13 @@ void setup() {
   loadImmagini();
   setupScale();
 
-  intro = new Movie(this, "intro.mp4");
   levelMusic = new SoundFile(this, "../data/sounds/levelMusic.mp3");
   deathMusic = new SoundFile(this, "../data/sounds/deathMusic.mp3");
+  jumping = new SoundFile(this, "../data/sounds/jumping.mp3");
+
   
-  martelli.add(new Martello(20, 20));
+  martelli.add(new Martello(20, 24.5));
+  martelli.add(new Martello(3, 13));
 }
 
 
@@ -31,6 +33,8 @@ void draw() {
   
   if (onMenu) {
     drawMenu();
+  }
+  else if (vittoria) {
   }
   else if (!mario.morto) {
     update();
@@ -65,16 +69,8 @@ void update() {
 
   tempoSpawn += 1;
 
-  if (mario.y < squareH * 8)
+  if (mario.y < squareH * 7.3 && !mario.salendo) {
     vittoria();
-}
-
-
-void movieEvent(Movie m) {
-  m.read();
-}
-
-void movieFinished(Movie m) {
-  showIntro = false;
-  intro.stop();
+    vittoria = true;
+  }
 }

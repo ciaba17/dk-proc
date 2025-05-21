@@ -34,6 +34,9 @@ void drawMap() {
   
   // Disegna barile OIL
   image(oil, squareW * 3, squareH  * 30, squareW * 2, squareH * 2);
+  
+  if (vittoria)
+    image(cuore, squareW * 13.9, squareH  * 5, squareW * 24, squareH * 2);
 }
 
 

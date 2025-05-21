@@ -1,4 +1,6 @@
-PImage scala, trave, barileVerticale, martello, peach, oil, menu, menuStart;
+import processing.sound.*;
+
+PImage scala, trave, barileVerticale, martello, peach, oil, menu, menuStart,dkongAngry, cuore;
 PImage rotolamentoBarili[] = new PImage[4];
 PImage discesaBarili[] = new PImage[2];
 
@@ -8,6 +10,7 @@ float lastWidth = 1, lastHeight = 1;
 float squareW, squareH;
 
 boolean onMenu = true;
+boolean vittoria = false;
 
 int rand;
 
@@ -26,10 +29,6 @@ int i = 0;
 
 final int barrelTimeSpawn = 90;
 
-import processing.sound.*;
-
 SoundFile levelMusic;
 SoundFile deathMusic;
-
-Movie intro, vittoria;
-boolean showIntro = true;
+SoundFile jumping;

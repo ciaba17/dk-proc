@@ -8,6 +8,8 @@ class Mario {
   float hammerH = altezza * 0.6;
   float hammerOffsetY = altezza * 0.2;
   
+  float durataMartello = 0;
+  
   int gridPosX, gridPosY;
   int dir; // 0 = fermo, 1 = destra, -1 = sinistra
   final float SPEED = width / 120;
@@ -109,7 +111,11 @@ class Mario {
     }
 
     if (conMartello && (!salitaSalto && !discesaSalto)) {
-      
+      durataMartello += 0.1;
+      if (durataMartello >= 18) {
+        durataMartello = 0;
+        conMartello = false;
+      }
     }
     else if (salitaSalto) {
       if (yBeforeSalto - y < altezzaSalto) {
@@ -170,8 +176,8 @@ class Mario {
       martHitboxL = x + larghezza * 0.5;
       martHitboxR = martHitboxL + hammerW;
     }
-    else {
-      martHitboxR = x + larghezza * 0.5;
+    else if (dir == -1){
+      martHitboxR = x - larghezza * 0.5;
       martHitboxL = martHitboxR - hammerW;
     }
     martHitboxU = y + hammerOffsetY;
@@ -234,7 +240,7 @@ class Mario {
         martHitboxD > barile.hitboxU &&
         martHitboxU < barile.hitboxD;
         
-      if (collisioneMartelloBarile)
+      if (collisioneMartelloBarile && conMartello)
         barile.daRimuovere = true;
     }
     barili.removeIf(barile -> barile.daRimuovere);
@@ -460,10 +466,16 @@ class DonkeyKong {
     else if (frameIndex > 50) i = 2;
     else if (frameIndex > 30) i = 1;
     
-    image(sprites[i], x, y, squareW * 6, squareH * 4); 
+    if (!vittoria)
+      image(sprites[i], x, y, squareW * 6, squareH * 4); 
     
-    if (!mario.morto)
+    if (!mario.morto && !onMenu && !vittoria)
       frameIndex += 1;
+    
+    if (vittoria)
+    {
+    image(dkongAngry, x, y, squareW * 6, squareH * 4); 
+    }
   }
 } DonkeyKong dKong;
 

@@ -16,10 +16,10 @@ void keyPressed() {
   if (key == ' ' && !mario.salendo && !mario.salitaSalto && !mario.discesaSalto && !mario.conMartello) {
     mario.salitaSalto = true;
     mario.yBeforeSalto = mario.y;
+    jumping.play();
   }
   if (keyCode == ENTER && onMenu) {
     onMenu = false;
-    intro.play();
   }
 }
 
